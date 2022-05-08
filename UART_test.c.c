@@ -15,10 +15,6 @@
 #define UARTBuffer UDR0
 #define keyPress (~PINB & 0b00001111)         // Invert the inputs because of active low and filter out the keys only.
 #define txBufferFree ( UCSR0A & (1 << UDRE0))    // Filter out the Tx buffer free bit from the UART control register
-#define key0 0b00000001
-#define key1 0b00000010
-#define key2 0b00000100
-#define key3 0b00001000
 #define Bell 0x07
 #define backspace 0x08
 #define CR 0x0D
@@ -50,26 +46,7 @@ int main(void)
 	
     while (1) 
     {
-		char keysPressed = keyPress;
-		if (keysPressed){
-			switch(keysPressed) {
-				case(key0): 
-					UARTBuffer = '1';
-					break;
-				case(key1):
-					UARTBuffer = '2';
-					break;
-				case(key2):
-					UARTBuffer = '3';
-					break;
-				case(key3):
-					UARTBuffer = '4';
-					break;
-				default:
-					break;
-			}
-			_delay_ms(100); // delay so not to spam the terminal
-		}
+
     }
 }
 
