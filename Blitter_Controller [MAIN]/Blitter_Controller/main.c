@@ -53,12 +53,27 @@ int main(void)
 			Få kontakt med flashminnet
 			Tegn fra flashminnet til skjermen
 	 */
-		transmitUART(89);
-		transmitUART(69);
-		transmitUART(83);
-		transmitUART(CR);
-		_delay_ms(1000);
     }
+}
+
+// Type S for system check:
+void systemCheck(){
+	transmitUART(CR);
+	transmitUART(S);
+	transmitUART(y);
+	transmitUART(s);
+	transmitUART(t);
+	transmitUART(e);
+	transmitUART(m);
+	transmitUART(_space);
+	transmitUART(c);
+	transmitUART(h);
+	transmitUART(e);
+	transmitUART(c);
+	transmitUART(k);
+	transmitUART(_colon);
+	transmitUART(CR);
+	// Check and print results of various components on the blitter board:
 }
 
 int transmitUART (char data){
@@ -84,6 +99,8 @@ ISR(USART0_RX_vect){
 	if (receivedByte){
 		if (receivedByte == 45) { // that's the '-' sign.
 			remoteEcho = ~remoteEcho;
+		}else if(receivedByte == S){
+			systemCheck();
 		}
 	// If echo is on, and the ASCII character is higher than 31, or Bell, Carriage Return, Line Feed or backspace, then echo the character. Other are filtered as to not get strange behavior from Putty.
 	}

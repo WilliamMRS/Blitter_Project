@@ -146,6 +146,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="HY32D.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HY32D.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
