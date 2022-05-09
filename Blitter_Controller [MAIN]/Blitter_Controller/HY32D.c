@@ -5,3 +5,6 @@
  *  Author: William M. R. Schmidt
  */ 
 
+#include "macros.h"
+#include "UART.h"
+#include "HY32D.h"

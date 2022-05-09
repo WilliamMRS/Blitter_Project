@@ -152,7 +152,16 @@
     <Compile Include="HY32D.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="macros.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="UART.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="UART.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

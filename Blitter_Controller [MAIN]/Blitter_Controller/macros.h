@@ -5,9 +5,25 @@
  *  Author: William M. R. Schmidt
  */ 
 
+#ifndef F_CPU
+#define F_CPU 7372800UL
+#endif
 
 #ifndef MACROS_H_
 #define MACROS_H_
+
+#define uart_bps 9600L  // max 57600
+
+#define UARTRxNotEmpty (UCSR0A & (1 << RXC0))    // Filter out the Rx buffer empty bit from the UART control register
+#define UARTBuffer UDR0
+#define txBufferFree ( UCSR0A & (1 << UDRE0))    // Filter out the Tx buffer free bit from the UART control register
+#define Bell 0x07
+#define backspace 0x08
+#define CR 0x0D
+#define LF 0x0A
+
+#define BUFFER_SIZE 8 // 8 bytes buffer size
+
 #define A 0x41
 #define B 0x42
 #define C 0x43
