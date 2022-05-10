@@ -27,7 +27,7 @@ void initUART (void){
 }
 
 int transmitUART (char data){
-	short timeoutLimit = 1000;
+	short timeoutLimit = 1000; // after 1000 tries, just skip it and try next char. This is about 136 microseconds of time at 7.37 Mhz
 	short timeout = 0;
 	while(1){
 		if(UCSR0A & (1 << UDRE0)){

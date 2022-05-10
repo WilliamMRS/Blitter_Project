@@ -18,25 +18,37 @@ Discarded input sections
  .data          0x00000000        0x0 HY32D.o
  .bss           0x00000000        0x0 HY32D.o
  .text.initHY32D
-                0x00000000        0x2 HY32D.o
- .debug_info    0x00000000       0x3f HY32D.o
- .debug_abbrev  0x00000000       0x2c HY32D.o
+                0x00000000       0x44 HY32D.o
+ .text.wrSignal
+                0x00000000        0xe HY32D.o
+ .text.rdSignal
+                0x00000000        0xe HY32D.o
+ .text.setIOtoOutput
+                0x00000000        0x8 HY32D.o
+ .text.setIOtoInput
+                0x00000000        0x6 HY32D.o
+ .debug_info    0x00000000       0xda HY32D.o
+ .debug_abbrev  0x00000000       0x67 HY32D.o
  .debug_aranges
-                0x00000000       0x20 HY32D.o
- .debug_ranges  0x00000000       0x10 HY32D.o
- .debug_line    0x00000000       0x3a HY32D.o
- .debug_str     0x00000000      0x127 HY32D.o
+                0x00000000       0x40 HY32D.o
+ .debug_ranges  0x00000000       0x30 HY32D.o
+ .debug_line    0x00000000      0x154 HY32D.o
+ .debug_str     0x00000000      0x1c3 HY32D.o
  .comment       0x00000000       0x31 HY32D.o
- .debug_frame   0x00000000       0x24 HY32D.o
+ .debug_frame   0x00000000       0x64 HY32D.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
- .text.LCDSetup
-                0x00000000       0x26 main.o
- .text.setIOtoOutput
-                0x00000000        0x8 main.o
- .text.setIOtoInput
+ .text.writeIndex
+                0x00000000       0x14 main.o
+ .text.readStatus
+                0x00000000       0x10 main.o
+ .text.readDataLines
+                0x00000000       0x1c main.o
+ .text.readData
                 0x00000000        0x6 main.o
+ .text.serialOutBinary
+                0x00000000        0x2 main.o
  .text          0x00000000        0x0 UART.o
  .data          0x00000000        0x0 UART.o
  .bss           0x00000000        0x0 UART.o
@@ -419,51 +431,51 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x70
+.debug_aranges  0x00000000       0x80
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x48 main.o
+                0x00000000       0x58 main.o
  .debug_aranges
-                0x00000048       0x28 UART.o
+                0x00000058       0x28 UART.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xb6c
+.debug_info     0x00000000      0xbf5
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x7b6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169p/avr5/crtatmega169p.o
- .debug_info    0x000007b6      0x2b9 main.o
- .debug_info    0x00000a6f       0xfd UART.o
+ .debug_info    0x000007b6      0x342 main.o
+ .debug_info    0x00000af8       0xfd UART.o
 
-.debug_abbrev   0x00000000      0x93f
+.debug_abbrev   0x00000000      0x965
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x74b C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169p/avr5/crtatmega169p.o
- .debug_abbrev  0x0000074b      0x142 main.o
- .debug_abbrev  0x0000088d       0xb2 UART.o
+ .debug_abbrev  0x0000074b      0x168 main.o
+ .debug_abbrev  0x000008b3       0xb2 UART.o
 
-.debug_line     0x00000000      0x421
+.debug_line     0x00000000      0x475
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x122 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169p/avr5/crtatmega169p.o
- .debug_line    0x00000122      0x206 main.o
- .debug_line    0x00000328       0xf9 UART.o
+ .debug_line    0x00000122      0x25a main.o
+ .debug_line    0x0000037c       0xf9 UART.o
 
-.debug_frame    0x00000000       0xf0
+.debug_frame    0x00000000      0x110
  *(.debug_frame)
- .debug_frame   0x00000000       0xbc main.o
- .debug_frame   0x000000bc       0x34 UART.o
+ .debug_frame   0x00000000       0xdc main.o
+ .debug_frame   0x000000dc       0x34 UART.o
 
-.debug_str      0x00000000      0x50a
+.debug_str      0x00000000      0x50c
  *(.debug_str)
  .debug_str     0x00000000      0x2b3 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169p/avr5/crtatmega169p.o
- .debug_str     0x000002b3      0x206 main.o
-                                0x23f (size before relaxing)
- .debug_str     0x000004b9       0x51 UART.o
+ .debug_str     0x000002b3      0x20d main.o
+                                0x246 (size before relaxing)
+ .debug_str     0x000004c0       0x4c UART.o
                                 0x1eb (size before relaxing)
 
-.debug_loc      0x00000000      0x127
+.debug_loc      0x00000000      0x168
  *(.debug_loc)
- .debug_loc     0x00000000       0xcb main.o
- .debug_loc     0x000000cb       0x5c UART.o
+ .debug_loc     0x00000000      0x10c main.o
+ .debug_loc     0x0000010c       0x5c UART.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -483,10 +495,10 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x50
+.debug_ranges   0x00000000       0x60
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x38 main.o
- .debug_ranges  0x00000038       0x18 UART.o
+ .debug_ranges  0x00000000       0x48 main.o
+ .debug_ranges  0x00000048       0x18 UART.o
 
 .debug_macro
  *(.debug_macro)
