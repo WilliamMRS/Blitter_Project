@@ -9,8 +9,10 @@
 #include "ASCII.h"
 #include "UART.h"
 #include "HY32D.h"
+#include "misc.h"
 
-void initHY32D(){
+// This isn't ready, see datasheet on how to complete start up sequence.
+void initHY32D(void){
 	// Setting CS, DC, RD, WR to output.
 	DDRB |= (1 << CS);
 	DDRB |= (1 << BL_PWM);
@@ -26,16 +28,55 @@ void initHY32D(){
 	// Set IO to output
 	DDRA = 0xFF; // D0 - D7
 	DDRC = 0xFF; // D8 - D15
+	
+	// Power supply setting (See page 71 of SSD1289 datasheet):
+	writeIndex(0x07);
+	writeData(0x21, 0x00);
+	writeIndex(0x00);
+	writeData(0x01, 0x00);
+	writeIndex(0x07);
+	writeData(0x33, 0x00);
+	// Entry mode setting
+	writeIndex(0x11);
+	writeData(0x30, 0x68);
+	// LCD driver 
+	writeIndex(0x02);
+	writeData(0x00, 0x00);
+	// Ram data write
+	//writeIndex(0x22);
+	// Display on
+}
+
+/*
+	Usage: Writes to the index register. The index register points to where the next written data should go.
+	Prereq: Set CS_LOW first.
+*/
+void writeIndex(unsigned short index){
+	DC_LOW; // DC LOW
+	RD_HIGH; // RD High (for good measure? can be omitted as RD should always be high)
+	D0_D7 = index; // IO Write
+	wrSignal();
+}
+
+/*
+	Usage: Writes to the index register. The index register points to where the next written data should go.
+	Prereq: Set CS_LOW first.
+*/
+void writeData(unsigned char lData, unsigned char hData){
+	DC_HIGH;
+	D0_D7 = lData; // Write data to GPIO lines (lines should by default be output)
+	D8_D15 = hData;
+	wrSignal();
 }
 
 void wrSignal(void){
-	PORTB &= ~(1 << WR);// WR LOW
-	PORTB |= (1 << WR);// WR HIGH
+	WR_LOW;
+	WR_HIGH;
 }
 
 void rdSignal(void){
-	PORTE &= ~(1 << RD); // RD LOW
-	PORTE |= (1 << RD); // RD HIGH
+	RD_LOW;
+	RD_HIGH;
 }
 
 void setIOtoOutput(void){

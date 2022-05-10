@@ -8,6 +8,7 @@
  *  ISP - JTAGICE3
  *
  */ 
+
 #define F_CPU 7372800UL
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -15,66 +16,71 @@
 #include "ASCII.h"
 #include "UART.h"
 #include "HY32D.h"
+#include "UARTCommands.h"
+#include "misc.h"
 
 // Global variables
-char receivedByte;
 uint8_t remoteEcho = 0;
 
-void writeIndex(unsigned short index){
-	PORTE &= ~(1 << DC); // DC LOW
-	PORTE |= (1 << RD); // RD High (for good measure? can be omitted as RD should always be high)
-	PORTA = index; // IO Write
-	wrSignal();
+/*
+	Usage: Reads and returns data on D0-D15.
+	Prereq: Set CS_LOW first.
+*/
+unsigned short readDataLines(void) {
+	unsigned short data;
+	// Set IO to input
+	setIOtoInput();
+	RD_LOW;
+	data = DATA_IN;
+	data = DATA_IN; // Reading twice to make sure data is good (not sure if it's needed)
+	RD_HIGH;
+	// Set IO to output
+	setIOtoOutput();
+	return data;
 }
-	
-unsigned short readStatus(void){
-	PORTE &= ~(1 << DC); // DC LOW
-						 // Set IO lines to output
-						 // read data coming through IO lines
-	wrSignal();
+
+// UNTESTED
+unsigned short statusRead(void){ // reads SR register
+	unsigned short data;
+	CS_LOW;
+	DC_LOW;
+	data = readDataLines();// read data coming through IO lines
+	char ldata = data & 0xFF;
+	char udata = (data >> 8) & 0xFF;
+	ldata = intToAscii(ldata);
+	transmitUART(ldata);
+	udata = intToAscii(udata);
+	transmitUART(udata);
+	transmitUART(CR);
+	CS_HIGH;
 	return 0;
 }
 
-unsigned short readDataLines() {
+// UNTESTED
+unsigned short readLCDData(void){
 	unsigned short data;
-	// Set IO to input
-	DDRA = 0x00; // D0 - D7
-	DDRC = 0x00; // D8 - D15
-	data = (PORTC << 8) | (PORTA & 0xFF);
-	data = (PORTC << 8) | (PORTA & 0xFF); // Reading twice to make sure data is good (not sure if it's needed)
-	// Set IO to output
-	DDRA = 0xFF; // D0 - D7
-	DDRC = 0xFF; // D8 - D15
-	return data;
-}
-
-unsigned short readData(void){
-	unsigned short data;
-	// DC high
-	// Wr high
-	// Rd low (??? cause we're reading?)
-	
-	// Set PORTA and PORTC to input
-
-	
+	DC_HIGH;
+	WR_HIGH;
 	data = readDataLines();
-	
-
-	
+	transmitUART((char)data);
 	return data;
 }
 	
-void serialOutBinary(unsigned short number){ // Used for seeing SR (Status Read) register and general debugging.
-	
+// debugging function
+void serialOutBinary(unsigned short number){
 }
 	
 int main(void)
 {	
     initUART(); // initialize the UART
+	initHY32D();
+	startupMessage();
 	sei(); //Enable global interrupt
 	
     while (1) 
     {
+		_delay_ms(1000);
+		statusRead();
 		/*TODO:
 		Snakk med skjermen
 		Tegn noe til skjermen 
@@ -87,30 +93,10 @@ int main(void)
     }
 }
 
-// Type S for system check:
-void systemCheck(){
-	transmitUART(CR);
-	transmitUART(S);
-	transmitUART(y);
-	transmitUART(s);
-	transmitUART(t);
-	transmitUART(e);
-	transmitUART(m);
-	transmitUART(_space);
-	transmitUART(c);
-	transmitUART(h);
-	transmitUART(e);
-	transmitUART(c);
-	transmitUART(k);
-	transmitUART(_colon);
-	transmitUART(CR);
-	// Check and print results of various components on the blitter board:
-}
-
 ISR(USART0_RX_vect){
 	// Read received data to variable. This also clears the interrupt flag. If data isn't read a new interrupt will immediately happen. See 19.7.3 datasheet.
 	// When the receive complete interrupt enable (RXCIEn) in UCSRnB is set, the USART receive complete interrupt will be executed as long as the RXCn flag is set.
-	receivedByte = UARTBuffer; // local temporary variable for received byte
+	unsigned char receivedByte = UARTBuffer; // local temporary variable for received byte
 	if (receivedByte){
 		if (receivedByte == 45) { // that's the '-' sign.
 			remoteEcho = ~remoteEcho;

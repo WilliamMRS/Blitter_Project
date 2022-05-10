@@ -9,6 +9,7 @@
 #include "ASCII.h"
 #include "UART.h"
 #include "HY32D.h"
+#include "misc.h"
 
 void initUART (void){
 	// calculating the baud rate clock division registers at compile time and setting the baud rate registers properly at run time.

@@ -16,10 +16,12 @@
 #define DC 7 // PE7
 
 #define RESET 0 // PB0
-
+void initHY32D(void);
 void wrSignal(void);
 void rdSignal(void);
 void setIOtoOutput(void);
 void setIOtoInput(void);
+void writeIndex(unsigned short index);
+void writeData(unsigned char lData, unsigned char hData);
 
 #endif /* HY32D_H_ */
