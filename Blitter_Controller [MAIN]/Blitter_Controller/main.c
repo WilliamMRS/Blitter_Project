@@ -28,20 +28,27 @@ uint8_t remoteEcho = 0;
 #define CS 6 // PB6
 #define BL_PWM 5 // PB5
 #define WR 4 // PB4
-
 #define RD 6 // PE6
 #define DC 7 // PE7
 
 #define RESET 0 // PB0
-
-
-
+/*
+		PORTC.DIR |= ( 1 << LED3); // Sets led to output
+		PORTD.OUT &= ~(1 << LED1); // Sets led OUT to 0, turning LED ON.
+*/
 void LCDSetup(){
-	/*
-		Setting CS, DC, RD, WR to output.
-		All are set to High (disabled). DC doesn't matter.
-	*/
-	
+	// Setting CS, DC, RD, WR to output.
+	DDRB |= (1 << CS);
+	DDRB |= (1 << BL_PWM);
+	DDRB |= (1 << WR);
+	DDRE |= (1 << RD);
+	DDRE |= (1 << DC);
+	// All are set to High (disabled). DC doesn't matter.
+	PORTB |= (1 << CS);
+	PORTB |= (1 << BL_PWM);
+	PORTB |= (1 << WR);
+	PORTE |= (1 << RD);
+	PORTE |= (1 << DC);
 	// Set IO to output
 	DDRA = 0xFF;
 	DDRC = 0xFF; 
@@ -90,6 +97,7 @@ int main(void)
 	unsigned short readStatus(void){
 		// DC LOW
 		// WR HIGH
+		return 0;
 	}
 	
 	void writeSignal(void){
