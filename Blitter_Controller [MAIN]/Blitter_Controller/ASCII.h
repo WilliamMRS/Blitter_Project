@@ -9,8 +9,8 @@
 #define F_CPU 7372800UL
 #endif
 
-#ifndef MACROS_H_
-#define MACROS_H_
+#ifndef ASCII_H_
+#define ASCII_H_
 
 #define uart_bps 9600L  // max 57600
 

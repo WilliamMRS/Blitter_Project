@@ -12,7 +12,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include "macros.h"
+#include "ASCII.h"
 #include "UART.h"
 #include "HY32D.h"
 
@@ -25,8 +25,82 @@ int transmitUART(char data);
 char receivedByte;
 uint8_t remoteEcho = 0;
 
+#define CS 6 // PB6
+#define BL_PWM 5 // PB5
+#define WR 4 // PB4
+
+#define RD 6 // PE6
+#define DC 7 // PE7
+
+#define RESET 0 // PB0
+
+
+
+void LCDSetup(){
+	/*
+		Setting CS, DC, RD, WR to output.
+		All are set to High (disabled). DC doesn't matter.
+	*/
+	
+	// Set IO to output
+	DDRA = 0xFF;
+	DDRC = 0xFF; 
+}
+
+// Use PORTA, PORTC to set bits.
+
+void setIOtoOutput(void){
+	DDRA = 0xFF;
+	DDRC = 0xFF;
+}
+void setIOtoInput(void){
+	DDRA = 0x00;
+	DDRC = 0x00;
+}
+
 int main(void)
 {	
+	/*
+	Set up interface mapping. PS3, PS2, PS1, PS0
+	
+	Configure for 8 bit operation. 8-bit 6800 parallel interface
+	PS3: 1, PS2: 0, PS1: 1, PS0: 0
+		CS is active LOW when using screen.
+	Read command:				RW: 1, E: high-> low, DC: 0
+	Read parameters or status:	RW: 1, E: high-> low, DC: 1
+	Write command:				RW: 0, E: high-> low, DC 0
+	Write command:				RW: 0, E: high-> low, DC 1
+	*/	
+	/*
+	Configure for 16 bit operation
+	*/
+	
+	// The index register, which only is accessed by having DC low and RW low decides which register is written data to.
+	
+
+	
+	void writeIndex(unsigned short index){
+		// DC LOW
+		// RD High
+		// IO Write
+		// WRLOW
+		// WRHIGH
+	}
+	
+	unsigned short readStatus(void){
+		// DC LOW
+		// WR HIGH
+	}
+	
+	void writeSignal(void){
+		// WR LOW
+		// WR HIGH
+	}
+	void readSignal(void){
+		// RD LOW
+		// RD HIGH
+	}
+	
     initUART(); // initialize the UART
 	sei(); //Enable global interrupt
 	

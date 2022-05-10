@@ -5,6 +5,10 @@
  *  Author: William M. R. Schmidt
  */ 
 
-#include "macros.h"
+#include "ASCII.h"
 #include "UART.h"
 #include "HY32D.h"
+
+void initHY32D(){
+	
+}
