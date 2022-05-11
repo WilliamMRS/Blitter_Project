@@ -6,7 +6,6 @@
  */
 
 #include <avr/io.h>
-#include "ASCII.h"
 #include "UART.h"
 #include "HY32D.h"
 #include "misc.h"

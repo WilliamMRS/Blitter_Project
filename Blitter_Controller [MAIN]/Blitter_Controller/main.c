@@ -14,7 +14,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include "ASCII.h"
 #include "UART.h"
 #include "HY32D.h"
 #include "UARTCommands.h"
@@ -29,6 +28,7 @@ int main(void)
     initUART(); // initialize the UART
 	initHY32D(); // initialize HY32D screen
 	sei(); //Enable global interrupt
+	systemCheck();
 	startupMessage();
     while (1) 
     {
@@ -36,17 +36,23 @@ int main(void)
 		//statusRead();
 		/*TODO:
 		
-		LCD:
-			Set coordinate before drawing (set memory addresses) (to 0,0 at start)
-			Function for drawing lines
-			Function for displaying text
-		UART:
-			Circular FIFO buffer that can take commands like fillScreen -red.
-			Be able to send commands with information like x, y coordinates, color etc.
-		UART Control:	
-			Draw line via UART command line: (command, color, start x, start y, end x, end y)
-			Draw rectangles: 
-			Write text coming via UART to specific coordinates on screen: (command, start x, start y, color, data)
+		Tonight:
+			LCD:
+				Set coordinate before drawing (set memory addresses) (to 0,0 at start)
+				Function for drawing lines
+				Function for displaying text
+			UART:
+				Circular FIFO buffer that can take commands like fillScreen -red.
+				Be able to send commands with information like x, y coordinates, color etc.
+			UART Control:
+				Draw line via UART command line: (command, color, start x, start y, end x, end y)
+				Draw rectangles:
+				Write text coming via UART to specific coordinates on screen: (command, start x, start y, color, data)
+		
+		Flash:
+			
+		SRAM:
+			
 		System control:
 			sjekk skjerm
 			sjekk SRAM
@@ -58,14 +64,14 @@ int main(void)
 		Få kontakt med flashminnet
 		Tegn fra flashminnet til skjermen v.h.a tellerne.
 		
-		- MÅ: Bruke en ATmega169A sammen med eksterm SRAM og 5 stk 74-logikk tellere for å
-		aksellerere grafikk på en 320x240 RGB LCD-skjerm.
-		- MÅ: UART for kommunikasjon til omverden. Grafikk-kommandoer og data kommer over UART.
-		- MÅ: Definere kommandoer over UART for å tegne grafikk og tekst.
+		- MÅ:  Bruke en ATmega169A sammen med ekstern SRAM og 5 stk 74-logikk tellere for 
+			   å aksellerere grafikk på en 320x240 RGB LCD-skjerm.
+		- MÅ:  UART for kommunikasjon til omverden. Grafikk-kommandoer og data kommer over UART.
+		- MÅ:  Definere kommandoer over UART for å tegne grafikk og tekst.
 		- BØR: Lagring av grafikk i FLASH.
 		- BØR: System-kontroll ved start.
-		- KAN: Lage et scriptingspråk med makroer som kan lagres i ekstern FLASH for enerering av
-		grafikk.
+		
+		- KAN: Lage et scriptingspråk med makroer som kan lagres i ekstern FLASH for enerering av grafikk.
 		- KAN: Presse ytelsen i systemet.
 		- KAN: Krever kanskje utvidet bruk av pekere som funksjonspekere
 		- KAN: Krever kanskje innslag av assembly i høynivåkode. Selvstudium.
@@ -81,15 +87,15 @@ ISR(USART0_RX_vect){
 	if (receivedByte){
 		if (receivedByte == 45) { // that's the '-' sign.
 			remoteEcho = ~remoteEcho;
-		}else if(receivedByte == s){
+		}else if(receivedByte == 's'){
 			systemCheck();
-		}else if(receivedByte == l){
-			statusRead();
-		}else if(receivedByte == b){
+		}else if(receivedByte == 'l'){
+			lcdStatusRead();
+		}else if(receivedByte == 'b'){
 			fillScreen(Blue);
-		}else if(receivedByte == r){
+		}else if(receivedByte == 'r'){
 			fillScreen(Red);
-		}else if(receivedByte == T){
+		}else if(receivedByte == 'T'){
 			screenTest();
 		}
 	// If echo is on, and the ASCII character is higher than 31, or Bell, Carriage Return, Line Feed or backspace, then echo the character. Other are filtered as to not get strange behavior from Putty.

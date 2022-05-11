@@ -6,7 +6,6 @@
  */ 
 
 #include <avr/io.h>
-#include "ASCII.h"
 #include "UART.h"
 #include "HY32D.h"
 #include "misc.h"
@@ -201,7 +200,7 @@ unsigned short readLCDData(void){
 	return data;
 }
 
-void statusRead(void){ // reads SR register
+void lcdStatusRead(void){ // reads SR register
 	unsigned short data;
 	CS_LOW;
 	DC_LOW;
@@ -209,14 +208,11 @@ void statusRead(void){ // reads SR register
 	uint8_t udata = ((data >> 8) & 0xFF);
 	uint8_t ldata = (data & 0xFF);
 	transmitUART(CR);
-	transmitUART(D);
-	transmitUART(A);
-	transmitUART(T);
-	transmitUART(A);
-	transmitUART(_colon);
-	transmitUART(_space);
+	transmitUART('S'); 	transmitUART('C'); 	transmitUART('R'); transmitUART('E'); 	transmitUART('E');
+	transmitUART('N'); 	transmitUART(' '); transmitUART('S'); 	transmitUART('T'); transmitUART('A');
+	transmitUART('T'); 	transmitUART('U'); transmitUART('S'); 	transmitUART(':'); transmitUART(' ');
 	transmitUART('0');
-	transmitUART(x);
+	transmitUART('x');
 	uint8_t udatauhex = ((udata >> 4) & 0x0F);
 	uint8_t udatalhex = (udata & 0x0F); // xxxx xxxx & 0000 1111 => xxxx 1001
 	transmitUART(toHex(udatauhex));

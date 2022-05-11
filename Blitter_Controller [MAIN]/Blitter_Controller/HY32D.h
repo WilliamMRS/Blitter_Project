@@ -28,7 +28,7 @@ void setIOtoInput(void);
 void writeIndex(unsigned short index);
 void writeData(unsigned short data);
 void writeToRegister(unsigned short index, unsigned short data);
-void statusRead(void);
+void lcdStatusRead(void);
 unsigned short readDataLines(void);
 unsigned short readLCDData(void);
 

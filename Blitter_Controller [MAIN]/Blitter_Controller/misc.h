@@ -28,6 +28,12 @@
 #define Light_Blue 0xFCE7
 #define Light_Yellow 0x7FFF // light yellow
 
+// special characters
+#define Bell 0x07
+#define backspace 0x08
+#define CR 0x0D
+#define LF 0x0A
+
 // macros
 #define RD_HIGH PORTE |= (1 << RD)
 #define RD_LOW PORTE &= ~(1 << RD)
