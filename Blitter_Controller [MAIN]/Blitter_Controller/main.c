@@ -39,7 +39,6 @@ unsigned short readDataLines(void) {
 	return data;
 }
 
-// UNTESTED
 unsigned short statusRead(void){ // reads SR register
 	unsigned short data;
 	CS_LOW;
@@ -56,7 +55,6 @@ unsigned short statusRead(void){ // reads SR register
 	return 0;
 }
 
-// UNTESTED
 unsigned short readLCDData(void){
 	unsigned short data;
 	DC_HIGH;
@@ -65,22 +63,18 @@ unsigned short readLCDData(void){
 	transmitUART((char)data);
 	return data;
 }
-	
-// debugging function
-void serialOutBinary(unsigned short number){
-}
-	
+
 int main(void)
 {	
+	// Startup sequence
     initUART(); // initialize the UART
-	initHY32D();
-	startupMessage();
+	initHY32D(); // initialize HY32D screen
 	sei(); //Enable global interrupt
-	
+	startupMessage();
     while (1) 
     {
-		_delay_ms(1000);
-		statusRead();
+		//_delay_ms(1000);
+		//statusRead();
 		/*TODO:
 		Snakk med skjermen
 		Tegn noe til skjermen 

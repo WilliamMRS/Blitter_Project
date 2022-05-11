@@ -10,6 +10,7 @@
 #include "UART.h"
 #include "HY32D.h"
 #include "misc.h"
+#include <util/delay.h>
 
 // This isn't ready, see datasheet on how to complete start up sequence.
 void initHY32D(void){
@@ -28,23 +29,36 @@ void initHY32D(void){
 	// Set IO to output
 	DDRA = 0xFF; // D0 - D7
 	DDRC = 0xFF; // D8 - D15
-	
+	CS_LOW;
 	// Power supply setting (See page 71 of SSD1289 datasheet):
+	// Set R07h at 0021h
 	writeIndex(0x07);
 	writeData(0x21, 0x00);
+	// Set R00h at 0001h
 	writeIndex(0x00);
 	writeData(0x01, 0x00);
+	// Set R07h at 0023h
+	writeIndex(0x07);
+	writeData(0x23, 0x00);
+	// Set R10h at 0000h Exit sleep mode
+	writeIndex(0x10);
+	writeData(0x00, 0x00);
+	// wait 30ms
+	_delay_ms(50);
+	// Set R07h at 0033h
 	writeIndex(0x07);
 	writeData(0x33, 0x00);
 	// Entry mode setting
 	writeIndex(0x11);
 	writeData(0x30, 0x68);
-	// LCD driver 
+	// LCD driver AC setting
 	writeIndex(0x02);
 	writeData(0x00, 0x00);
 	// Ram data write
-	//writeIndex(0x22);
+	writeIndex(0x22);
+	writeData(0x00, 0x00);
 	// Display on
+	CS_HIGH;
 }
 
 /*
