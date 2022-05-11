@@ -7,6 +7,7 @@
 
 #include "ASCII.h"
 #include "UART.h"
+#include "HY32D.h"
 
 // Type S for system check:
 void systemCheck(void){

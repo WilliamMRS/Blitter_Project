@@ -76,14 +76,16 @@ int main(void)
 		//_delay_ms(1000);
 		//statusRead();
 		/*TODO:
-		Snakk med skjermen
-		Tegn noe til skjermen 
 		Lag et funksjonsbibliotek for skjermen
+			Set coordinate before drawing
+			Ability to write text
+			
 			
 		Brukt USART til å kjøre kommandoer
 			
 		Få kontakt med flashminnet
-		Tegn fra flashminnet til skjermen*/
+		Tegn fra flashminnet til skjermen via tellere
+		*/
     }
 }
 

@@ -12,5 +12,4 @@
 void systemCheck(void); // Type S for system check.
 void startupMessage(void); // Startup message
 
-
 #endif /* UARTCOMMANDS_H_ */

@@ -12,6 +12,9 @@
 #include "misc.h"
 #include <util/delay.h>
 
+unsigned char lData; // not redeclaring these variables increases performance a lot
+unsigned char hData;
+
 // This isn't ready, see datasheet on how to complete start up sequence.
 void initHY32D(void){
 	// Setting CS, DC, RD, WR to output.
@@ -29,9 +32,7 @@ void initHY32D(void){
 	// Set IO to output
 	DDRA = 0xFF; // D0 - D7
 	DDRC = 0xFF; // D8 - D15
-	
 	_delay_ms(100);
-	
 	RST_HIGH;
 	_delay_ms(5);
 	RST_LOW;
@@ -41,27 +42,26 @@ void initHY32D(void){
 	
 	// Power supply setting (See page 71 of SSD1289 datasheet):
 	// Set R07h at 0021h
-	writeToRegister(0x07, 0x21, 0x00);
+	writeToRegister(0x07, 0x0021);
 	// Set R00h at 0001h (turn on oscillator)
-	writeToRegister(0x00, 0x01, 0x00);
+	writeToRegister(0x00, 0x0001);
 	// Set R07h at 0023h
-	writeToRegister(0x07, 0x23, 0x00);
+	writeToRegister(0x07, 0x0023);
 	// Set R10h at 0000h Exit sleep mode
-	writeToRegister(0x10, 0x00, 0x00);
+	writeToRegister(0x10, 0x0000);
 	// wait 30ms
-	_delay_ms(50);
+	_delay_ms(30);
 	// Set R07h at 0033h. Which means grayscale level output. See page 36.
-	writeToRegister(0x07, 0x33, 0x00);
+	writeToRegister(0x07, 0x0033);
 	// Entry mode setting
-	writeToRegister(0x11, 0x30, 0x68);
+	writeToRegister(0x11, 0x6830);
 	// LCD driver AC setting
-	writeToRegister(0x02, 0x00, 0x00);
+	writeToRegister(0x02, 0x0000);
 	// Ram data write
-	for(int it = 0; it < 62000; it++){
-		writeToRegister(0x22, 0x8E, 0x45);
-		transmitUART(S);
-	}
-	
+	fillScreen(Light_Yellow);
+	colorTest();
+	fillScreen(Light_Blue);
+	colorTest();
 	// Display on
 }
 
@@ -80,17 +80,19 @@ void writeIndex(unsigned short index){
 	Usage: Writes to the index register. The index register points to where the next written data should go.
 	Prereq: Set CS_LOW first.
 */
-void writeData(unsigned char lData, unsigned char hData){
+void writeData(unsigned short data){
 	DC_HIGH;
+	lData = (data & 0xFF);
+	hData = ((data >> 8) & 0xFF);
 	D0_D7 = lData; // Write data to GPIO lines (lines should by default be output)
 	D8_D15 = hData;
 	wrSignal();
 }
 
-void writeToRegister(unsigned short index, unsigned char lData, unsigned char hData){
+void writeToRegister(unsigned short index, unsigned short data){
 	CS_LOW;
 	writeIndex(index);
-	writeData(lData, hData);
+	writeData(data);
 	CS_HIGH;
 }
 
@@ -111,4 +113,49 @@ void setIOtoOutput(void){
 void setIOtoInput(void){
 	DDRA = 0x00;
 	DDRC = 0x00;
+}
+
+void fillScreen(unsigned short color){
+	CS_LOW;
+	writeIndex(0x22);
+	for(unsigned long int it = 0; it < pixels; it++){
+		writeData(color);
+	}
+	CS_HIGH;
+}
+
+void colorTest(void){
+	CS_LOW;
+	writeIndex(0x22);
+	for(int it = 0; it < 7680; it++){
+		writeData(White);
+	}
+	for(int it = 0; it < 7680; it++){
+		writeData(Black);
+	}
+	for(int it = 0; it < 7680; it++){
+		writeData(Grey);
+	}
+	for(int it = 0; it < 7680; it++){
+		writeData(Blue);
+	}
+	for(int it = 0; it < 7680; it++){
+		writeData(Light_Blue);
+	}
+	for(int it = 0; it < 7680; it++){
+		writeData(Red);
+	}
+	for(int it = 0; it < 7680; it++){
+		writeData(Magenta);
+	}
+	for(int it = 0; it < 7680; it++){
+		writeData(Green);
+	}
+	for(int it = 0; it < 7680; it++){
+		writeData(Cyan);
+	}
+	for(int it = 0; it < 7680; it++){
+		writeData(Yellow);
+	}
+	CS_HIGH;
 }

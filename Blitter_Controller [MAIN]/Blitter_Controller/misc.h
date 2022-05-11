@@ -13,16 +13,18 @@
 #define F_CPU 7372800UL
 #endif
 
+// Blue, green, red
 #define White 0xFFFF
 #define Black 0x0000
-#define Grey 0xF7DE
-#define Blue 0x001F
-#define Light_Blue 0x051F
-#define Red 0xF800
+#define Grey 0xF7DE // very light grey
+#define Red 0x001F
+#define Yellow 0x051F
+#define Blue 0xF800
 #define Magenta 0xF81F
 #define Green 0x07E0
-#define Cyan 0x7FFF
-#define Yellow 0xFFE0
+#define Cyan 0xFFE0
+#define Light_Blue 0xFCE7
+#define Light_Yellow 0x7FFF // light yellow
 
 // macros
 #define RD_HIGH PORTE |= (1 << RD)

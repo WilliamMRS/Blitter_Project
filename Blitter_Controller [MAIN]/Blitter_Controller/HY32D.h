@@ -16,13 +16,20 @@
 #define DC 7 // PE7
 #define RESET 0 // PB0
 
+#define height 240
+#define width 320
+#define pixels 76800
+
 void initHY32D(void);
 void wrSignal(void);
 void rdSignal(void);
 void setIOtoOutput(void);
 void setIOtoInput(void);
 void writeIndex(unsigned short index);
-void writeData(unsigned char lData, unsigned char hData);
-void writeToRegister(unsigned short index, unsigned char lData, unsigned char hData);
+void writeData(unsigned short data);
+void writeToRegister(unsigned short index, unsigned short data);
+
+void fillScreen(unsigned short color);
+void colorTest(void);
 
 #endif /* HY32D_H_ */
