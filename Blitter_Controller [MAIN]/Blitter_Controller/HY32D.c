@@ -22,43 +22,47 @@ void initHY32D(void){
 	DDRE |= (1 << DC);
 	// All are set to High (disabled). DC doesn't matter.
 	PORTB |= (1 << CS);
-	PORTB |= (1 << BL_PWM);
+	//PORTB |= (1 << BL_PWM);
 	PORTB |= (1 << WR);
 	PORTE |= (1 << RD);
 	PORTE |= (1 << DC);
 	// Set IO to output
 	DDRA = 0xFF; // D0 - D7
 	DDRC = 0xFF; // D8 - D15
-	CS_LOW;
+	
+	_delay_ms(100);
+	
+	RST_HIGH;
+	_delay_ms(5);
+	RST_LOW;
+	_delay_ms(15);
+	RST_HIGH;
+	_delay_ms(15);
+	
 	// Power supply setting (See page 71 of SSD1289 datasheet):
 	// Set R07h at 0021h
-	writeIndex(0x07);
-	writeData(0x21, 0x00);
-	// Set R00h at 0001h
-	writeIndex(0x00);
-	writeData(0x01, 0x00);
+	writeToRegister(0x07, 0x21, 0x00);
+	// Set R00h at 0001h (turn on oscillator)
+	writeToRegister(0x00, 0x01, 0x00);
 	// Set R07h at 0023h
-	writeIndex(0x07);
-	writeData(0x23, 0x00);
+	writeToRegister(0x07, 0x23, 0x00);
 	// Set R10h at 0000h Exit sleep mode
-	writeIndex(0x10);
-	writeData(0x00, 0x00);
+	writeToRegister(0x10, 0x00, 0x00);
 	// wait 30ms
 	_delay_ms(50);
-	// Set R07h at 0033h
-	writeIndex(0x07);
-	writeData(0x33, 0x00);
+	// Set R07h at 0033h. Which means grayscale level output. See page 36.
+	writeToRegister(0x07, 0x33, 0x00);
 	// Entry mode setting
-	writeIndex(0x11);
-	writeData(0x30, 0x68);
+	writeToRegister(0x11, 0x30, 0x68);
 	// LCD driver AC setting
-	writeIndex(0x02);
-	writeData(0x00, 0x00);
+	writeToRegister(0x02, 0x00, 0x00);
 	// Ram data write
-	writeIndex(0x22);
-	writeData(0x00, 0x00);
+	for(int it = 0; it < 62000; it++){
+		writeToRegister(0x22, 0x8E, 0x45);
+		transmitUART(S);
+	}
+	
 	// Display on
-	CS_HIGH;
 }
 
 /*
@@ -81,6 +85,13 @@ void writeData(unsigned char lData, unsigned char hData){
 	D0_D7 = lData; // Write data to GPIO lines (lines should by default be output)
 	D8_D15 = hData;
 	wrSignal();
+}
+
+void writeToRegister(unsigned short index, unsigned char lData, unsigned char hData){
+	CS_LOW;
+	writeIndex(index);
+	writeData(lData, hData);
+	CS_HIGH;
 }
 
 void wrSignal(void){
