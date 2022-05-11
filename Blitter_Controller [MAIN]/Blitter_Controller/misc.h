@@ -13,6 +13,8 @@
 #define F_CPU 7372800UL
 #endif
 
+#include "stdint.h"
+
 // Blue, green, red
 #define White 0xFFFF
 #define Black 0x0000
@@ -41,6 +43,6 @@
 #define D8_D15 PORTC // used only for output
 #define DATA_IN (PINC << 8) | (PINA & 0xFF) // macro for reading incoming data
 
-char intToAscii(char number);
+uint8_t toHex(uint8_t number);
 
 #endif /* MISC_H_ */

@@ -27,12 +27,20 @@ void initUART (void){
 	UCSR0C = 0x00 | (0 << UMSEL0) | (0 << UPM01) | (0 << UPM00) | (0 << USBS0) | (1 << UCSZ01) | (1 << UCSZ00); // Selecting 8-bit character for the USART
 }
 
+uint8_t puttyCompatibleCheck(uint8_t byte){
+	if((byte > 31) || (byte == Bell) || (byte == CR) || (byte == LF) || (byte == backspace)){
+		return byte;
+		}else{
+		return (uint8_t)64;
+	}
+}
+
 int transmitUART (char data){
 	short timeoutLimit = 1000; // after 1000 tries, just skip it and try next char. This is about 136 microseconds of time at 7.37 Mhz
 	short timeout = 0;
 	while(1){
 		if(UCSR0A & (1 << UDRE0)){
-			UARTBuffer = data;
+			UARTBuffer = puttyCompatibleCheck(data);
 			return 1;
 			}else{
 			timeout++;

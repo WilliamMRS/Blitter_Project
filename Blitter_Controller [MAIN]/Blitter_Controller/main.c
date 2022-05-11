@@ -10,6 +10,7 @@
  */ 
 
 #define F_CPU 7372800UL
+#include "stdint.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -21,48 +22,6 @@
 
 // Global variables
 uint8_t remoteEcho = 0;
-
-/*
-	Usage: Reads and returns data on D0-D15.
-	Prereq: Set CS_LOW first.
-*/
-unsigned short readDataLines(void) {
-	unsigned short data;
-	// Set IO to input
-	setIOtoInput();
-	RD_LOW;
-	data = DATA_IN;
-	data = DATA_IN; // Reading twice to make sure data is good (not sure if it's needed)
-	RD_HIGH;
-	// Set IO to output
-	setIOtoOutput();
-	return data;
-}
-
-unsigned short statusRead(void){ // reads SR register
-	unsigned short data;
-	CS_LOW;
-	DC_LOW;
-	data = readDataLines();// read data coming through IO lines
-	char ldata = data & 0xFF;
-	char udata = (data >> 8) & 0xFF;
-	ldata = intToAscii(ldata);
-	transmitUART(ldata);
-	udata = intToAscii(udata);
-	transmitUART(udata);
-	transmitUART(CR);
-	CS_HIGH;
-	return 0;
-}
-
-unsigned short readLCDData(void){
-	unsigned short data;
-	DC_HIGH;
-	WR_HIGH;
-	data = readDataLines();
-	transmitUART((char)data);
-	return data;
-}
 
 int main(void)
 {	
@@ -76,15 +35,41 @@ int main(void)
 		//_delay_ms(1000);
 		//statusRead();
 		/*TODO:
-		Lag et funksjonsbibliotek for skjermen
-			Set coordinate before drawing
-			Ability to write text
-			
+		
+		LCD:
+			Set coordinate before drawing (set memory addresses) (to 0,0 at start)
+			Function for drawing lines
+			Function for displaying text
+		UART:
+			Circular FIFO buffer that can take commands like fillScreen -red.
+			Be able to send commands with information like x, y coordinates, color etc.
+		UART Control:	
+			Draw line via UART command line: (command, color, start x, start y, end x, end y)
+			Draw rectangles: 
+			Write text coming via UART to specific coordinates on screen: (command, start x, start y, color, data)
+		System control:
+			sjekk skjerm
+			sjekk SRAM
+			sjekk UART
+			sjekk tellere
 			
 		Brukt USART til å kjøre kommandoer
 			
 		Få kontakt med flashminnet
-		Tegn fra flashminnet til skjermen via tellere
+		Tegn fra flashminnet til skjermen v.h.a tellerne.
+		
+		- MÅ: Bruke en ATmega169A sammen med eksterm SRAM og 5 stk 74-logikk tellere for å
+		aksellerere grafikk på en 320x240 RGB LCD-skjerm.
+		- MÅ: UART for kommunikasjon til omverden. Grafikk-kommandoer og data kommer over UART.
+		- MÅ: Definere kommandoer over UART for å tegne grafikk og tekst.
+		- BØR: Lagring av grafikk i FLASH.
+		- BØR: System-kontroll ved start.
+		- KAN: Lage et scriptingspråk med makroer som kan lagres i ekstern FLASH for enerering av
+		grafikk.
+		- KAN: Presse ytelsen i systemet.
+		- KAN: Krever kanskje utvidet bruk av pekere som funksjonspekere
+		- KAN: Krever kanskje innslag av assembly i høynivåkode. Selvstudium.
+		- INFO:Utviklingen vil skje på egen maskinvareplattform.
 		*/
     }
 }
@@ -92,18 +77,24 @@ int main(void)
 ISR(USART0_RX_vect){
 	// Read received data to variable. This also clears the interrupt flag. If data isn't read a new interrupt will immediately happen. See 19.7.3 datasheet.
 	// When the receive complete interrupt enable (RXCIEn) in UCSRnB is set, the USART receive complete interrupt will be executed as long as the RXCn flag is set.
-	unsigned char receivedByte = UARTBuffer; // local temporary variable for received byte
+	uint8_t receivedByte = UARTBuffer; // local temporary variable for received byte
 	if (receivedByte){
 		if (receivedByte == 45) { // that's the '-' sign.
 			remoteEcho = ~remoteEcho;
-		}else if(receivedByte == S){
+		}else if(receivedByte == s){
 			systemCheck();
+		}else if(receivedByte == l){
+			statusRead();
+		}else if(receivedByte == b){
+			fillScreen(Blue);
+		}else if(receivedByte == r){
+			fillScreen(Red);
+		}else if(receivedByte == T){
+			screenTest();
 		}
 	// If echo is on, and the ASCII character is higher than 31, or Bell, Carriage Return, Line Feed or backspace, then echo the character. Other are filtered as to not get strange behavior from Putty.
 	}
 	if (remoteEcho && ((receivedByte > 31) || (receivedByte == Bell) || (receivedByte == CR) || (receivedByte == LF) || (receivedByte == backspace))){
-		if(UCSR0A & (1 << UDRE0)){ // check if byte is 1
-			UARTBuffer = receivedByte;
-		}
+		transmitUART(receivedByte);
 	}
 }

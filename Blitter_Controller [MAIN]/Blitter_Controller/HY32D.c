@@ -58,9 +58,6 @@ void initHY32D(void){
 	// LCD driver AC setting
 	writeToRegister(0x02, 0x0000);
 	// Ram data write
-	fillScreen(Light_Yellow);
-	colorTest();
-	fillScreen(Light_Blue);
 	colorTest();
 	// Display on
 }
@@ -113,6 +110,7 @@ void setIOtoOutput(void){
 void setIOtoInput(void){
 	DDRA = 0x00;
 	DDRC = 0x00;
+	_delay_ms(100);
 }
 
 void fillScreen(unsigned short color){
@@ -121,6 +119,23 @@ void fillScreen(unsigned short color){
 	for(unsigned long int it = 0; it < pixels; it++){
 		writeData(color);
 	}
+	CS_HIGH;
+}
+
+void screenTest(void){
+	CS_LOW;
+	fillScreen(White);
+	fillScreen(Black);
+	fillScreen(Grey);
+	fillScreen(Red);
+	fillScreen(Yellow);
+	fillScreen(Blue);
+	fillScreen(Magenta);
+	fillScreen(Green);
+	fillScreen(Cyan);
+	fillScreen(Light_Yellow);
+	fillScreen(Light_Blue);
+	colorTest();
 	CS_HIGH;
 }
 
@@ -157,5 +172,59 @@ void colorTest(void){
 	for(int it = 0; it < 7680; it++){
 		writeData(Yellow);
 	}
+	CS_HIGH;
+}
+
+/*
+	Usage: Reads and returns data on D0-D15.
+	Prereq: Set CS_LOW first.
+*/
+unsigned short readDataLines(void) {
+	unsigned short data;
+	// Set IO to input
+	setIOtoInput();
+	RD_LOW;
+	data = DATA_IN;
+	data = DATA_IN; // Reading twice to make sure data is good (not sure if it's needed)
+	RD_HIGH;
+	// Set IO to output
+	setIOtoOutput();
+	return data;
+}
+
+unsigned short readLCDData(void){
+	unsigned short data;
+	DC_HIGH;
+	WR_HIGH;
+	data = readDataLines();
+	transmitUART((char)data);
+	return data;
+}
+
+void statusRead(void){ // reads SR register
+	unsigned short data;
+	CS_LOW;
+	DC_LOW;
+	data = readDataLines();// read data coming through IO lines
+	uint8_t udata = ((data >> 8) & 0xFF);
+	uint8_t ldata = (data & 0xFF);
+	transmitUART(CR);
+	transmitUART(D);
+	transmitUART(A);
+	transmitUART(T);
+	transmitUART(A);
+	transmitUART(_colon);
+	transmitUART(_space);
+	transmitUART('0');
+	transmitUART(x);
+	uint8_t udatauhex = ((udata >> 4) & 0x0F);
+	uint8_t udatalhex = (udata & 0x0F); // xxxx xxxx & 0000 1111 => xxxx 1001
+	transmitUART(toHex(udatauhex));
+	transmitUART(toHex(udatalhex));
+	uint8_t ldatauhex = ((ldata >> 4) & 0x0F);
+	uint8_t ldatalhex = (ldata & 0x0F); // xxxx xxxx & 0000 1111 => xxxx 1001
+	transmitUART(toHex(ldatauhex));
+	transmitUART(toHex(ldatalhex));
+	transmitUART(CR);
 	CS_HIGH;
 }
