@@ -36,12 +36,16 @@
 
 // Control pins
 #define LOAD PE3
+#define SRAM_OE PE4
+#define SRAM_WE PE5
 #define RD PE6
 #define DC PE7
+
 #define RESET PB0
 #define WR_BLT_CLK PB4
 #define BL_PWM PB5
 #define CS PB6
+#define BLT_EN PB7
 
 // macros
 #define RD_HIGH PORTE |= (1 << RD)
@@ -54,6 +58,14 @@
 #define CS_LOW PORTB &= ~(1 << CS)
 #define RESET_HIGH PORTB |= (1 << RESET)
 #define RESET_LOW PORTB &= ~(1 << RESET)
+#define LOAD_HIGH PORTE |= (1 << LOAD)
+#define LOAD_LOW PORTE &= ~(1 << LOAD)
+#define BLT_EN_HIGH PORTB |= (1 << BLT_EN)
+#define BLT_EN_LOW PORTB &= ~(1 << BLT_EN)
+#define SRAM_OE_HIGH PORTE |= (1 << SRAM_OE)
+#define SRAM_OE_LOW PORTE &= ~(1 << SRAM_OE)
+#define SRAM_WE_HIGH PORTE |= (1 << SRAM_WE)
+#define SRAM_WE_LOW PORTE &= ~(1 << SRAM_WE)
 
 #define D0_D7 PORTA // used only for output
 #define D8_D15 PORTC // used only for output

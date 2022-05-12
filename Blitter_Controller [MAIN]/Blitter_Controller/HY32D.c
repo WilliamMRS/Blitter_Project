@@ -102,6 +102,7 @@ void setIOtoInput(void){
 
 void drawImage(unsigned short image[]){
 	CS_LOW;
+	writeIndex(0x22);
 	for(unsigned int i = 0; i < 2540; i++){
 		writeData(image[i]);
 	}

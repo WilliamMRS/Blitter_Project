@@ -21,6 +21,8 @@
 
 // Global variables
 uint8_t remoteEcho = 0;
+unsigned char lData; // not redeclaring these variables increases performance a lot
+unsigned char hData;
 
 	// CS SRAM low
 	// CS LCD high
@@ -28,22 +30,10 @@ uint8_t remoteEcho = 0;
 	// BLT_EN to enable counters. Send clk to increment counters.
 	// Write to SRAM by loading data to output lines (same as when writing to screen) then sending WR signal
 
-void writeSRAM(){
-	// Reset counters
-	// BLT_EN enable counters
-	
-	// Set tellere til rett addresse før man skriver til SRAM:
-		// Sett SRAM og LCD CS_PINS til HIGH (altså ingen er valgt)
-		// preset address
-			// Bruk datalinjene fra mikrokontrolleren (sett alle til 0)
-			// BLT_RST (to reset counter values is also an option
-	
-	// BLT_EN disabled
-	// CS SRAM low (select sram)
-	
-	// Loop 
-		// Load data to output lines
-		// WriteEnable to SRAM (this increments internal address by 1)
+// same as wrSignal
+void blitSignal(void){
+	WR_BLT_CLK_LOW;
+	WR_BLT_CLK_HIGH;
 }
 
 void blitFromSRAM(void){
@@ -53,9 +43,11 @@ void blitFromSRAM(void){
 	// Send blitSignal (this sends write signal to screen, and increments counters by 1)
 }
 
-void blitSignal(void){
-	WR_BLT_CLK_HIGH;
-	WR_BLT_CLK_LOW;
+void loadDataToOutputLines(unsigned short data){
+	lData = (data & 0xFF);
+	hData = ((data >> 8) & 0xFF);
+	D0_D7 = lData; // Write data to GPIO lines (lines should by default be output)
+	D8_D15 = hData;
 }
 
 void setExtraBlitIOToOutput(void) {
@@ -64,9 +56,10 @@ void setExtraBlitIOToOutput(void) {
 	DDRE |= (1 << PE5); // Port 5 to output (/SRAM WE)	(D17)
 	DDRE |= (1 << PE6); // Port 6 to output (RD)			(D18)
 	DDRE |= (1 << PE7); // Port 7 to output (DC)			(D19)
-	_delay_ms(100);
+	_delay_ms(100); // Not sure if this is necessary, check later
 }
 
+// BLT_RST (to reset counter values is also an option. See counter datasheet.
 void presetCountersToZero(void){
 	CS_HIGH; // Deselect LCD and SRAM
 	setIOtoOutput(); // Set all lines to output
@@ -78,10 +71,64 @@ void presetCountersToZero(void){
 	PORTE &= ~(1 << PE5);
 	PORTE &= ~(1 << PE6);
 	PORTE &= ~(1 << PE7);
-
+	_delay_ms(1);
+	// Counter signal lines
 	RESET_HIGH; // Set CLR(BLT_RST)(PB0)(RESET) to HIGH
-	PORTE &= ~(1 << PE3); // Set LOAD to LOW  (PE3)
+	LOAD_LOW; // Set LOAD(PE3) to LOW
 	blitSignal();// Send blitsignal (aka a clk)
+	LOAD_HIGH;
+}
+
+void wrSignalSRAM(){
+	SRAM_WE_LOW;
+	SRAM_WE_HIGH;
+}
+
+void rdSignalSRAM(){
+	SRAM_OE_LOW;
+	SRAM_OE_HIGH;
+}
+
+void readSRAM(void){
+	presetCountersToZero();
+	CS_LOW;
+	BLT_EN_HIGH;
+	
+	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
+	rdSignalSRAM(); // SRAM OE goes HIGH-LOW-HIGH
+	blitSignal();
+	
+	CS_HIGH;
+	BLT_EN_LOW;
+}
+
+void writeSRAM(void){
+	presetCountersToZero(); // Set counters to your desired value (up to 2^20, or about 1 million)
+	CS_LOW; // Select SRAM (and display)
+	BLT_EN_HIGH; // BLT_EN HIGH so the address gets incremented by each write.
+	SRAM_OE_HIGH; // Output enable to high (disabled). Isn't needed I think.
+	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.
+	// Loops with data to transfer. This is hardcoded for now.
+	
+	DC_HIGH;
+	for(unsigned long int i = 0; i < (pixels/3); i++){
+		loadDataToOutputLines(Red);
+		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
+		blitSignal(); // counters increment by one.
+	}
+	for(unsigned long int i = 0; i < (pixels/3); i++){
+		loadDataToOutputLines(Green);
+		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
+		blitSignal(); // counters increment by one.
+	}
+	for(unsigned long int i = 0; i < (pixels/3); i++){
+		loadDataToOutputLines(Blue);
+		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
+		blitSignal(); // counters increment by one.
+	}
+	
+	CS_HIGH; // deselect LCD and SRAM
+	BLT_EN_LOW;
 }
 
 // Send BLT_CLK x antall ganger for å komme deg til den addressen du ønsker i SRAM'en.
@@ -91,8 +138,11 @@ int main(void)
 	// Startup sequence
 	
 	// Init counters:
-	DDRE |= (1 << PE3); // Setting LOAD to output;
-	PORTE |= (1 << PE3); // Setting LOAD to high (disabled)
+	DDRE |= (1 << LOAD); // Setting LOAD to output;
+	LOAD_HIGH; // Setting LOAD to high (disabled)
+	
+	DDRB |= (1 << PB7); // Setting BLT_EN to output;
+	BLT_EN_LOW; // Setting BLT_EN to low.
 	
 	// Init IO and LCD:
 	// Setting CS, DC, RD, WR to output.
@@ -103,7 +153,7 @@ int main(void)
 	DDRE |= (1 << DC);
 	// All are set to High (disabled). DC doesn't matter.
 	PORTB |= (1 << CS);
-	//PORTB |= (1 << BL_PWM);
+	//PORTB |= (1 << BL_PWM); // Not enabled rn as it turns off display. Fix this later.
 	PORTB |= (1 << WR_BLT_CLK);
 	PORTE |= (1 << RD);
 	PORTE |= (1 << DC);
@@ -116,14 +166,16 @@ int main(void)
 	sei(); //Enable global interrupt
 	systemCheck();
 	startupMessage();
+	
     while (1) 
     {
 		//_delay_ms(1000);
 		//statusRead();
 		/*TODO:
 		
+		R02h to fix display flicker. Do that after initialization.
+		
 		Blitting:
-			Function to preset counters to 0 or other desired value.
 			Function to write to SRAM.
 			Function to blit from SRAM using the counters.
 		
@@ -186,8 +238,10 @@ ISR(USART0_RX_vect){
 			lcdStatusRead();
 		}else if(receivedByte == 'b'){
 			fillScreen(Blue);
+		}else if(receivedByte == 'w'){
+			writeSRAM();
 		}else if(receivedByte == 'r'){
-			//drawImage(image);
+			readSRAM();
 		}else if(receivedByte == 'T'){
 			screenTest();
 		}
