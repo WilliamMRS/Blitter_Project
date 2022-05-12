@@ -9,13 +9,6 @@
 #ifndef HY32D_H_
 #define HY32D_H_
 
-#define CS 6 // PB6
-#define BL_PWM 5 // PB5
-#define WR 4 // PB4
-#define RD 6 // PE6
-#define DC 7 // PE7
-#define RESET 0 // PB0
-
 #define height 240
 #define width 320
 #define pixels 76800
@@ -35,5 +28,6 @@ unsigned short readLCDData(void);
 void fillScreen(unsigned short color);
 void screenTest(void);
 void colorTest(void);
+void drawImage(unsigned short image[]);
 
 #endif /* HY32D_H_ */

@@ -15,28 +15,13 @@ unsigned char lData; // not redeclaring these variables increases performance a 
 unsigned char hData;
 
 // This isn't ready, see datasheet on how to complete start up sequence.
-void initHY32D(void){
-	// Setting CS, DC, RD, WR to output.
-	DDRB |= (1 << CS);
-	DDRB |= (1 << BL_PWM);
-	DDRB |= (1 << WR);
-	DDRE |= (1 << RD);
-	DDRE |= (1 << DC);
-	// All are set to High (disabled). DC doesn't matter.
-	PORTB |= (1 << CS);
-	//PORTB |= (1 << BL_PWM);
-	PORTB |= (1 << WR);
-	PORTE |= (1 << RD);
-	PORTE |= (1 << DC);
-	// Set IO to output
-	DDRA = 0xFF; // D0 - D7
-	DDRC = 0xFF; // D8 - D15
+void initHY32D(void){	
 	_delay_ms(100);
-	RST_HIGH;
+	RESET_HIGH;
 	_delay_ms(5);
-	RST_LOW;
+	RESET_LOW;
 	_delay_ms(15);
-	RST_HIGH;
+	RESET_HIGH;
 	_delay_ms(15);
 	
 	// Power supply setting (See page 71 of SSD1289 datasheet):
@@ -92,9 +77,12 @@ void writeToRegister(unsigned short index, unsigned short data){
 	CS_HIGH;
 }
 
+/*
+	This is doing the same as blitSignal
+*/
 void wrSignal(void){
-	WR_LOW;
-	WR_HIGH;
+	WR_BLT_CLK_LOW;
+	WR_BLT_CLK_HIGH;
 }
 
 void rdSignal(void){
@@ -110,6 +98,14 @@ void setIOtoInput(void){
 	DDRA = 0x00;
 	DDRC = 0x00;
 	_delay_ms(100);
+}
+
+void drawImage(unsigned short image[]){
+	CS_LOW;
+	for(unsigned int i = 0; i < 2540; i++){
+		writeData(image[i]);
+	}
+	CS_HIGH;
 }
 
 void fillScreen(unsigned short color){
@@ -194,7 +190,7 @@ unsigned short readDataLines(void) {
 unsigned short readLCDData(void){
 	unsigned short data;
 	DC_HIGH;
-	WR_HIGH;
+	WR_BLT_CLK_HIGH;
 	data = readDataLines();
 	transmitUART((char)data);
 	return data;

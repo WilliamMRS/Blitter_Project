@@ -146,6 +146,9 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="bitmap.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="HY32D.c">
       <SubType>compile</SubType>
     </Compile>
@@ -159,6 +162,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="misc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SRAM.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SRAM.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="UART.c">

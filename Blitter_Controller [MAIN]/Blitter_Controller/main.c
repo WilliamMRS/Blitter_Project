@@ -22,9 +22,95 @@
 // Global variables
 uint8_t remoteEcho = 0;
 
+	// CS SRAM low
+	// CS LCD high
+	// Reset all counters (so they become 0).
+	// BLT_EN to enable counters. Send clk to increment counters.
+	// Write to SRAM by loading data to output lines (same as when writing to screen) then sending WR signal
+
+void writeSRAM(){
+	// Reset counters
+	// BLT_EN enable counters
+	
+	// Set tellere til rett addresse før man skriver til SRAM:
+		// Sett SRAM og LCD CS_PINS til HIGH (altså ingen er valgt)
+		// preset address
+			// Bruk datalinjene fra mikrokontrolleren (sett alle til 0)
+			// BLT_RST (to reset counter values is also an option
+	
+	// BLT_EN disabled
+	// CS SRAM low (select sram)
+	
+	// Loop 
+		// Load data to output lines
+		// WriteEnable to SRAM (this increments internal address by 1)
+}
+
+void blitFromSRAM(void){
+	// Preset counters to 0.
+	// Sett BLT_EN enabled (enable counters)
+	// Sett CS_LOW (enabling both SRAM and Screen)
+	// Send blitSignal (this sends write signal to screen, and increments counters by 1)
+}
+
+void blitSignal(void){
+	WR_BLT_CLK_HIGH;
+	WR_BLT_CLK_LOW;
+}
+
+void setExtraBlitIOToOutput(void) {
+	// This can probably be done at startup/initialization
+	DDRE |= (1 << PE4); // Port 4 to output (/SRAM OE)	(D16)
+	DDRE |= (1 << PE5); // Port 5 to output (/SRAM WE)	(D17)
+	DDRE |= (1 << PE6); // Port 6 to output (RD)			(D18)
+	DDRE |= (1 << PE7); // Port 7 to output (DC)			(D19)
+	_delay_ms(100);
+}
+
+void presetCountersToZero(void){
+	CS_HIGH; // Deselect LCD and SRAM
+	setIOtoOutput(); // Set all lines to output
+	setExtraBlitIOToOutput();
+	// Give all outlines a value of 0
+	D0_D7 = 0x00;
+	D8_D15 = 0x00;
+	PORTE &= ~(1 << PE4);
+	PORTE &= ~(1 << PE5);
+	PORTE &= ~(1 << PE6);
+	PORTE &= ~(1 << PE7);
+
+	RESET_HIGH; // Set CLR(BLT_RST)(PB0)(RESET) to HIGH
+	PORTE &= ~(1 << PE3); // Set LOAD to LOW  (PE3)
+	blitSignal();// Send blitsignal (aka a clk)
+}
+
+// Send BLT_CLK x antall ganger for å komme deg til den addressen du ønsker i SRAM'en.
+
 int main(void)
 {	
 	// Startup sequence
+	
+	// Init counters:
+	DDRE |= (1 << PE3); // Setting LOAD to output;
+	PORTE |= (1 << PE3); // Setting LOAD to high (disabled)
+	
+	// Init IO and LCD:
+	// Setting CS, DC, RD, WR to output.
+	DDRB |= (1 << CS);
+	DDRB |= (1 << BL_PWM);
+	DDRB |= (1 << WR_BLT_CLK);
+	DDRE |= (1 << RD);
+	DDRE |= (1 << DC);
+	// All are set to High (disabled). DC doesn't matter.
+	PORTB |= (1 << CS);
+	//PORTB |= (1 << BL_PWM);
+	PORTB |= (1 << WR_BLT_CLK);
+	PORTE |= (1 << RD);
+	PORTE |= (1 << DC);
+	// Set IO to output
+	DDRA = 0xFF; // D0 - D7
+	DDRC = 0xFF; // D8 - D15
+	
     initUART(); // initialize the UART
 	initHY32D(); // initialize HY32D screen
 	sei(); //Enable global interrupt
@@ -36,7 +122,12 @@ int main(void)
 		//statusRead();
 		/*TODO:
 		
-		Tonight:
+		Blitting:
+			Function to preset counters to 0 or other desired value.
+			Function to write to SRAM.
+			Function to blit from SRAM using the counters.
+		
+		Today:
 			LCD:
 				Set coordinate before drawing (set memory addresses) (to 0,0 at start)
 				Function for drawing lines
@@ -48,21 +139,23 @@ int main(void)
 				Draw line via UART command line: (command, color, start x, start y, end x, end y)
 				Draw rectangles:
 				Write text coming via UART to specific coordinates on screen: (command, start x, start y, color, data)
-		
-		Flash:
+		Tonight:
+			Flash:
 			
-		SRAM:
+			SRAM:
 			
-		System control:
-			sjekk skjerm
-			sjekk SRAM
-			sjekk UART
-			sjekk tellere
+			System control:
+				sjekk skjerm
+				sjekk SRAM
+				sjekk UART
+				sjekk tellere
+				
+			Brukt USART til å kjøre kommandoer
 			
-		Brukt USART til å kjøre kommandoer
-			
-		Få kontakt med flashminnet
-		Tegn fra flashminnet til skjermen v.h.a tellerne.
+			Få kontakt med flashminnet
+				Tegn fra SRAM til skjermen v.h.a tellerne.
+				
+			// kan lage funksjon som gjør at skjermen ikke hopper addresse når den har tegnet.
 		
 		- MÅ:  Bruke en ATmega169A sammen med ekstern SRAM og 5 stk 74-logikk tellere for 
 			   å aksellerere grafikk på en 320x240 RGB LCD-skjerm.
@@ -94,7 +187,7 @@ ISR(USART0_RX_vect){
 		}else if(receivedByte == 'b'){
 			fillScreen(Blue);
 		}else if(receivedByte == 'r'){
-			fillScreen(Red);
+			//drawImage(image);
 		}else if(receivedByte == 'T'){
 			screenTest();
 		}
