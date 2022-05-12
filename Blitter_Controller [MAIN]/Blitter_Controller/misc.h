@@ -12,8 +12,15 @@
 #ifndef F_CPU
 #define F_CPU 7372800UL
 #endif
+/*
+#ifndef PORTE
+// Microchip studio skal være vanskelig
+#define PORTE _SFR_IO8(0x0E)
+#endif
+*/
 
 #include "stdint.h"
+#include <avr/io.h>
 
 // Blue, green, red
 #define White 0xFFFF
@@ -35,33 +42,37 @@
 #define LF 0x0A
 
 // Control pins
-#define LOAD PE3
-#define SRAM_OE PE4
-#define SRAM_WE PE5
-#define RD PE6
-#define DC PE7
 
-#define RESET PB0
-#define WR_BLT_CLK PB4
-#define BL_PWM PB5
-#define CS PB6
-#define BLT_EN PB7
+// PORT E
+#define LOAD 3
+#define SRAM_OE 4
+#define SRAM_WE 5
+#define RD 6
+#define DC 7
+
+// PORT B
+#define RESET 0
+#define WR_BLT_CLK 4
+#define BL_PWM 5
+#define CS 6
+#define BLT_EN 7
 
 // macros
-#define RD_HIGH PORTE |= (1 << RD)
-#define RD_LOW PORTE &= ~(1 << RD)
 #define WR_BLT_CLK_HIGH PORTB |= (1 << WR_BLT_CLK)
 #define WR_BLT_CLK_LOW PORTB &= ~(1 << WR_BLT_CLK)
-#define DC_HIGH PORTE |= (1 << DC)
-#define DC_LOW PORTE &= ~(1 << DC)
 #define CS_HIGH PORTB |= (1 << CS)
 #define CS_LOW PORTB &= ~(1 << CS)
 #define RESET_HIGH PORTB |= (1 << RESET)
 #define RESET_LOW PORTB &= ~(1 << RESET)
-#define LOAD_HIGH PORTE |= (1 << LOAD)
-#define LOAD_LOW PORTE &= ~(1 << LOAD)
 #define BLT_EN_HIGH PORTB |= (1 << BLT_EN)
 #define BLT_EN_LOW PORTB &= ~(1 << BLT_EN)
+
+#define RD_HIGH PORTE |= (1 << RD)
+#define RD_LOW PORTE &= ~(1 << RD)
+#define DC_HIGH PORTE |= (1 << DC)
+#define DC_LOW PORTE &= ~(1 << DC)
+#define LOAD_HIGH PORTE |= (1 << LOAD)
+#define LOAD_LOW PORTE &= ~(1 << LOAD)
 #define SRAM_OE_HIGH PORTE |= (1 << SRAM_OE)
 #define SRAM_OE_LOW PORTE &= ~(1 << SRAM_OE)
 #define SRAM_WE_HIGH PORTE |= (1 << SRAM_WE)
@@ -72,5 +83,6 @@
 #define DATA_IN (PINC << 8) | (PINA & 0xFF) // macro for reading incoming data
 
 uint8_t toHex(uint8_t number);
+void transmitInt(uint32_t number);
 
 #endif /* MISC_H_ */

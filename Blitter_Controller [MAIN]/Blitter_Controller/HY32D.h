@@ -30,4 +30,7 @@ void screenTest(void);
 void colorTest(void);
 void drawImage(unsigned short image[]);
 
+unsigned char lData;
+unsigned char hData;
+
 #endif /* HY32D_H_ */

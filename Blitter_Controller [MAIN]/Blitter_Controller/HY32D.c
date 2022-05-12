@@ -11,7 +11,8 @@
 #include "misc.h"
 #include <util/delay.h>
 
-unsigned char lData; // not redeclaring these variables increases performance a lot
+// not redeclaring these variables increases performance a lot (when not blitting)
+unsigned char lData;
 unsigned char hData;
 
 // This isn't ready, see datasheet on how to complete start up sequence.
@@ -97,6 +98,7 @@ void setIOtoInput(void){
 	_delay_ms(100);
 }
 
+/* Not in use currently
 void drawImage(unsigned short image[]){
 	CS_LOW;
 	writeIndex(0x22);
@@ -105,6 +107,7 @@ void drawImage(unsigned short image[]){
 	}
 	CS_HIGH;
 }
+*/
 
 void fillScreen(unsigned short color){
 	CS_LOW;

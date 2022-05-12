@@ -18,11 +18,12 @@
 #include "HY32D.h"
 #include "UARTCommands.h"
 #include "misc.h"
+#include "SRAM.h"
 
 // Global variables
 uint8_t remoteEcho = 0;
-unsigned char lData; // not redeclaring these variables increases performance a lot
-unsigned char hData;
+//unsigned char lData; // not redeclaring these variables increases performance a lot
+//unsigned char hData;
 
 void loadDataToOutputLines(unsigned short data){
 	lData = (data & 0xFF);
@@ -31,59 +32,15 @@ void loadDataToOutputLines(unsigned short data){
 	D8_D15 = hData;
 }
 
-void setExtraBlitIOToOutput(void) {
-	// This can probably be done at startup/initialization
-	DDRE |= (1 << PE4); // Port 4 to output (/SRAM OE)	(D16)
-	DDRE |= (1 << PE5); // Port 5 to output (/SRAM WE)	(D17)
-	DDRE |= (1 << PE6); // Port 6 to output (RD)			(D18)
-	DDRE |= (1 << PE7); // Port 7 to output (DC)			(D19)
-	_delay_ms(100); // Not sure if this is necessary, check later
-}
-
-// BLT_RST (to reset counter values is also an option. See counter datasheet.
-void presetCountersToZero(void){
-	CS_HIGH; // Deselect LCD and SRAM
-	setIOtoOutput(); // Set all lines to output
-	setExtraBlitIOToOutput();
-	// Give all outlines a value of 0
-	D0_D7 = 0x00;
-	D8_D15 = 0x00;
-	PORTE &= ~(1 << PE4);
-	PORTE &= ~(1 << PE5);
-	PORTE &= ~(1 << PE6);
-	PORTE &= ~(1 << PE7);
-	_delay_ms(1);
-	// Counter signal lines
-	RESET_HIGH; // Set CLR(BLT_RST)(PB0)(RESET) to HIGH
-	LOAD_LOW; // Set LOAD(PE3) to LOW
-	wrSignal();// Send blitsignal (aka a clk)
-	LOAD_HIGH;
-	SRAM_OE_HIGH;
-	SRAM_WE_HIGH;
-}
-
-void wrSignalSRAM(){
-	SRAM_WE_LOW;
-	_delay_us(1);
-	SRAM_WE_HIGH;
-}
-
-void rdSignalSRAM(){
-	SRAM_OE_LOW;
-	_delay_us(1);
-	SRAM_OE_HIGH;
-}
-
 // It looks like a write signal to the CLK ruins something ..
 void readSRAM(void){
-	SRAM_WE_HIGH; // SRAM Write high (disabled)
-	presetCountersToZero(); // set counters to 0
+	SRAMOutputDisable(); // disable SRAM OE, WE
+	presetCounters(0); // set counters to 0
 	
 	//BLT_RST, BLT_LD, BLT_EN should all be HIGH
 	//Then do BLT_CLK for it to count
-	
-	CS_LOW; // Select screen and SRAM
 	BLT_EN_HIGH; // counters enabled
+	CS_LOW; // Select screen and SRAM
 	
 	DC_HIGH;
 	writeIndex(0x22); // ensure writing to screenbuffer
@@ -94,23 +51,32 @@ void readSRAM(void){
 		wrSignal(); // counters increment by one and screen updates.
 	}
 	
-	CS_HIGH; // deselect screen and ram
+	CS_HIGH; // deselect LCD and SRAM
 	BLT_EN_LOW; // counters disabled
+	SRAMOutputDisable(); // disable SRAM OE, WE
 }
 
 void writeSRAM(void){
-	presetCountersToZero(); // Set counters to your desired value (up to 2^20, or about 1 million)
-	CS_LOW; // Select SRAM (and display)
-	BLT_EN_HIGH; // BLT_EN HIGH so the address gets incremented by each write.
+	SRAMOutputDisable(); // Disable SRAM
+	presetCounters(0); // Set counters to your desired value (up to 2^20, or about 1 million)
+	BLT_EN_HIGH; // counters enabled
+	CS_LOW; // Select LCD and SRAM
 	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.
-	// Loops with data to transfer. This is hardcoded for now
-	
 	DC_HIGH;
-	for(unsigned long int i = 0; i < (pixels/3); i++){
-		loadDataToOutputLines(Red);
+	// Loops with data to transfer. This is hardcoded for now
+
+	for(unsigned long int i = 0; i < (pixels); i++){
+		loadDataToOutputLines(Magenta);
 		wrSignalSRAM(); // WriteEnable to SRAM
-		wrSignal(); // counters increment by one.
-	}
+		
+		// SRAM write
+		// delay(1us)
+		// SRAM read
+		// lcdwrite, lcdwritestop
+		
+		//SRAMOutputDisable();
+		wrSignal(); // CLK sends write signal to display, and increment counters by 1.
+	}/*
 	for(unsigned long int i = 0; i < (pixels/3); i++){
 		loadDataToOutputLines(Green);
 		wrSignalSRAM(); // WriteEnable to SRAM
@@ -120,60 +86,57 @@ void writeSRAM(void){
 		loadDataToOutputLines(Blue);
 		wrSignalSRAM(); // WriteEnable to SRAM
 		wrSignal(); // counters increment by one.
-	}
+	}*/
 	
 	CS_HIGH; // deselect LCD and SRAM
-	BLT_EN_LOW;
+	BLT_EN_LOW; // counters disabled
+	SRAMOutputDisable(); // disable SRAM
 }
-
-// Send BLT_CLK x antall ganger for å komme deg til den addressen du ønsker i SRAM'en.
 
 int main(void)
 {	
-	// Startup sequence
-	
-	// Init counters:
-	DDRE |= (1 << LOAD); // Setting LOAD to output;
-	LOAD_HIGH; // Setting LOAD to high (disabled)
-	
-	DDRB |= (1 << PB7); // Setting BLT_EN to output;
-	BLT_EN_LOW; // Setting BLT_EN to low.
-	
-	// Init IO and LCD:
-	// Setting CS, DC, RD, WR to output.
+	// Init IO:
+	// PORT B to output
+	DDRB |= (1 << RESET);
 	DDRB |= (1 << CS);
 	DDRB |= (1 << BL_PWM);
 	DDRB |= (1 << WR_BLT_CLK);
-	DDRE |= (1 << RD);
-	DDRE |= (1 << DC);
+	DDRB |= (1 << BLT_EN); // Setting BLT_EN to output;
+	// PORT E to output
+	DDRE |= (1 << SRAM_OE); // Port 4 to output (/SRAM OE)	(D16)
+	DDRE |= (1 << SRAM_WE); // Port 5 to output (/SRAM WE)	(D17)
+	DDRE |= (1 << RD); // Port 6 to output (RD)			(D18)
+	DDRE |= (1 << DC); // Port 7 to output (DC)			(D19)
+	DDRE |= (1 << LOAD); // Setting LOAD to output;
+	// Set outlines
+	BLT_EN_LOW; // Setting BLT_EN to low.
 	// All are set to High (disabled). DC doesn't matter.
-	PORTB |= (1 << CS);
-	//PORTB |= (1 << BL_PWM); // Not enabled rn as it turns off display. Fix this later.
-	PORTB |= (1 << WR_BLT_CLK);
-	PORTE |= (1 << RD);
-	PORTE |= (1 << DC);
-	// Set IO to output
+	CS_HIGH;
+	WR_BLT_CLK_HIGH;
+	RD_HIGH;
+	DC_HIGH;
+	LOAD_HIGH; // Setting LOAD to high (disabled)
+	//PORTB |= (1 << BL_PWM); // Not enabled rn as it turns off display. Handle this pin later (Pwm control)
+	
+	// Set IO (D0-D15) to output
 	DDRA = 0xFF; // D0 - D7
 	DDRC = 0xFF; // D8 - D15
+
 	
     initUART(); // initialize the UART
 	initHY32D(); // initialize HY32D screen
+	
 	sei(); //Enable global interrupt
 	systemCheck();
 	startupMessage();
 	
     while (1) 
     {
-		//_delay_ms(1000);
-		//statusRead();
 		/*TODO:
-		
-		Bug: Read - Blue - Test -> Makes test only draw white screen, then stop.
-		
 		R02h to fix display flicker. Do that after initialization.
-		
 		Blitting:
 			Function to write to SRAM.
+			Function to read from SRAM (to see if SRAM is written).
 			Function to blit from SRAM using the counters.
 		
 		Today:
@@ -189,10 +152,6 @@ int main(void)
 				Draw rectangles:
 				Write text coming via UART to specific coordinates on screen: (command, start x, start y, color, data)
 		Tonight:
-			Flash:
-			
-			SRAM:
-			
 			System control:
 				sjekk skjerm
 				sjekk SRAM
@@ -210,15 +169,14 @@ int main(void)
 			   å aksellerere grafikk på en 320x240 RGB LCD-skjerm.
 		- MÅ:  UART for kommunikasjon til omverden. Grafikk-kommandoer og data kommer over UART.
 		- MÅ:  Definere kommandoer over UART for å tegne grafikk og tekst.
-		- BØR: Lagring av grafikk i FLASH.
 		- BØR: System-kontroll ved start.
+		- BØR: Lagring av grafikk i FLASH.
 		
 		- KAN: Lage et scriptingspråk med makroer som kan lagres i ekstern FLASH for enerering av grafikk.
 		- KAN: Presse ytelsen i systemet.
 		- KAN: Krever kanskje utvidet bruk av pekere som funksjonspekere
 		- KAN: Krever kanskje innslag av assembly i høynivåkode. Selvstudium.
-		- INFO:Utviklingen vil skje på egen maskinvareplattform.
-		*/
+		- INFO:Utviklingen vil skje på egen maskinvareplattform. */
     }
 }
 
@@ -241,10 +199,9 @@ ISR(USART0_RX_vect){
 			readSRAM();
 		}else if(receivedByte == 'T'){
 			screenTest();
-		}else if(receivedByte == 'u'){
-			
+		}else if(receivedByte == 'o'){
+			presetCounters(100000);
 		}
-	// If echo is on, and the ASCII character is higher than 31, or Bell, Carriage Return, Line Feed or backspace, then echo the character. Other are filtered as to not get strange behavior from Putty.
 	}
 	if (remoteEcho && ((receivedByte > 31) || (receivedByte == Bell) || (receivedByte == CR) || (receivedByte == LF) || (receivedByte == backspace))){
 		transmitUART(receivedByte);

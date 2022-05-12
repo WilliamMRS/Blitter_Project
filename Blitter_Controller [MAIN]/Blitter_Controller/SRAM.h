@@ -9,8 +9,9 @@
 #ifndef SRAM_H_
 #define SRAM_H_
 
-
-
-
+void wrSignalSRAM(void);
+void rdSignalSRAM(void);
+void SRAMOutputDisable(void);
+void presetCounters(uint32_t value);
 
 #endif /* SRAM_H_ */
