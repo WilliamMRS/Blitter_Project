@@ -37,28 +37,33 @@ void readSRAM(void){
 	SRAMOutputDisable(); // disable SRAM OE, WE
 	presetCounters(0); // set counters to 0
 	
-	//BLT_RST, BLT_LD, BLT_EN should all be HIGH
+	//BLT_RST (PB0), BLT_LD, BLT_EN should all be HIGH
 	//Then do BLT_CLK for it to count
 	BLT_EN_HIGH; // counters enabled
+	RESET_HIGH; // for counter BLT_RST
+	LOAD_HIGH; // for counter BLT_LD
 	CS_LOW; // Select screen and SRAM
 	
-	DC_HIGH;
 	writeIndex(0x22); // ensure writing to screenbuffer
+	DC_HIGH; // So it can write to screen!
 	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
 	
 	for(unsigned long int i = 0; i < (pixels); i++){
 		rdSignalSRAM(); // SRAM OE goes LOW-HIGH reading the SRAM values on the address specified by the counters to the screen.
-		wrSignal(); // counters increment by one and screen updates.
+		// PE4 flip fast as f
+		wrSignal(); // counters increment by one and screen updates. BLT_EN and WR
+		// PB4 flip fast as f
 	}
 	
 	CS_HIGH; // deselect LCD and SRAM
 	BLT_EN_LOW; // counters disabled
 	SRAMOutputDisable(); // disable SRAM OE, WE
+	setIOtoOutput();
 }
 
 void writeSRAM(void){
 	SRAMOutputDisable(); // Disable SRAM
-	presetCounters(0); // Set counters to your desired value (up to 2^20, or about 1 million)
+	presetCounters(0); // Set counters to your desired value (up to 2^20, or about 1 million). Also sets IO to output.
 	BLT_EN_HIGH; // counters enabled
 	CS_LOW; // Select LCD and SRAM
 	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.

@@ -212,7 +212,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x8d0
+.text           0x00000000      0x8d8
  *(.vectors)
  .vectors       0x00000000       0x5c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169pa/avr5/crtatmega169pa.o
                 0x00000000                __vector_default
@@ -333,50 +333,50 @@ END GROUP
                 0x00000482       0x12 main.o
                 0x00000482                loadDataToOutputLines
  .text.readSRAM
-                0x00000494       0x76 main.o
+                0x00000494       0x86 main.o
                 0x00000494                readSRAM
  .text.writeSRAM
-                0x0000050a       0x7a main.o
-                0x0000050a                writeSRAM
- .text.main     0x00000584       0x7a main.o
-                0x00000584                main
+                0x0000051a       0x7a main.o
+                0x0000051a                writeSRAM
+ .text.main     0x00000594       0x7a main.o
+                0x00000594                main
  .text.__vector_13
-                0x000005fe       0xd2 main.o
-                0x000005fe                __vector_13
- .text.toHex    0x000006d0       0x3a misc.o
-                0x000006d0                toHex
+                0x0000060e       0xd2 main.o
+                0x0000060e                __vector_13
+ .text.toHex    0x000006e0       0x3a misc.o
+                0x000006e0                toHex
  .text.wrSignalSRAM
-                0x0000070a       0x16 SRAM.o
-                0x0000070a                wrSignalSRAM
+                0x0000071a       0x16 SRAM.o
+                0x0000071a                wrSignalSRAM
  .text.rdSignalSRAM
-                0x00000720       0x16 SRAM.o
-                0x00000720                rdSignalSRAM
+                0x00000730        0xe SRAM.o
+                0x00000730                rdSignalSRAM
  .text.SRAMOutputDisable
-                0x00000736        0xe SRAM.o
-                0x00000736                SRAMOutputDisable
+                0x0000073e        0xe SRAM.o
+                0x0000073e                SRAMOutputDisable
  .text.presetCounters
-                0x00000744       0x6c SRAM.o
-                0x00000744                presetCounters
+                0x0000074c       0x6c SRAM.o
+                0x0000074c                presetCounters
  .text.initUART
-                0x000007b0       0x1c UART.o
-                0x000007b0                initUART
+                0x000007b8       0x1c UART.o
+                0x000007b8                initUART
  .text.puttyCompatibleCheck
-                0x000007cc       0x18 UART.o
-                0x000007cc                puttyCompatibleCheck
+                0x000007d4       0x18 UART.o
+                0x000007d4                puttyCompatibleCheck
  .text.transmitUART
-                0x000007e4       0x2c UART.o
-                0x000007e4                transmitUART
+                0x000007ec       0x2c UART.o
+                0x000007ec                transmitUART
  .text.systemCheck
-                0x00000810       0x66 UARTCommands.o
-                0x00000810                systemCheck
+                0x00000818       0x66 UARTCommands.o
+                0x00000818                systemCheck
  .text.startupMessage
-                0x00000876       0x56 UARTCommands.o
-                0x00000876                startupMessage
-                0x000008cc                . = ALIGN (0x2)
+                0x0000087e       0x56 UARTCommands.o
+                0x0000087e                startupMessage
+                0x000008d4                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000008cc        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x000008cc                _exit
-                0x000008cc                exit
+ .fini9         0x000008d4        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x000008d4                _exit
+                0x000008d4                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -395,11 +395,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000008cc        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x000008d4        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000008d0                _etext = .
+                0x000008d8                _etext = .
 
-.data           0x00800100        0x0 load address 0x000008d0
+.data           0x00800100        0x0 load address 0x000008d8
                 [!provide]                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -423,8 +423,8 @@ END GROUP
                 0x00800101                lData
                 0x00800102                hData
                 0x00800103                PROVIDE (__bss_end, .)
-                0x000008d0                __data_load_start = LOADADDR (.data)
-                0x000008d0                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000008d8                __data_load_start = LOADADDR (.data)
+                0x000008d8                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800103        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -518,15 +518,15 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2127
+.debug_info     0x00000000     0x2103
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x7b6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169pa/avr5/crtatmega169pa.o
  .debug_info    0x000007b6      0xb81 HY32D.o
- .debug_info    0x00001337      0x3c3 main.o
- .debug_info    0x000016fa      0x28c misc.o
- .debug_info    0x00001986      0x319 SRAM.o
- .debug_info    0x00001c9f      0x158 UART.o
- .debug_info    0x00001df7      0x330 UARTCommands.o
+ .debug_info    0x00001337      0x3d9 main.o
+ .debug_info    0x00001710      0x28c misc.o
+ .debug_info    0x0000199c      0x2df SRAM.o
+ .debug_info    0x00001c7b      0x158 UART.o
+ .debug_info    0x00001dd3      0x330 UARTCommands.o
 
 .debug_abbrev   0x00000000      0xdce
  *(.debug_abbrev)
@@ -538,15 +538,15 @@ END GROUP
  .debug_abbrev  0x00000c68       0xce UART.o
  .debug_abbrev  0x00000d36       0x98 UARTCommands.o
 
-.debug_line     0x00000000      0xf8c
+.debug_line     0x00000000      0xf92
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x121 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169pa/avr5/crtatmega169pa.o
  .debug_line    0x00000121      0x5a7 HY32D.o
- .debug_line    0x000006c8      0x34a main.o
- .debug_line    0x00000a12      0x187 misc.o
- .debug_line    0x00000b99      0x1fb SRAM.o
- .debug_line    0x00000d94      0x150 UART.o
- .debug_line    0x00000ee4       0xa8 UARTCommands.o
+ .debug_line    0x000006c8      0x35c main.o
+ .debug_line    0x00000a24      0x187 misc.o
+ .debug_line    0x00000bab      0x1ef SRAM.o
+ .debug_line    0x00000d9a      0x150 UART.o
+ .debug_line    0x00000eea       0xa8 UARTCommands.o
 
 .debug_frame    0x00000000      0x388
  *(.debug_frame)
@@ -563,7 +563,7 @@ END GROUP
  .debug_str     0x000002b3      0x2b0 HY32D.o
                                 0x2e9 (size before relaxing)
  .debug_str     0x00000563       0xbd main.o
-                                0x2b3 (size before relaxing)
+                                0x2c1 (size before relaxing)
  .debug_str     0x00000620       0x47 misc.o
                                 0x1d9 (size before relaxing)
  .debug_str     0x00000667       0x30 SRAM.o
@@ -573,13 +573,13 @@ END GROUP
  .debug_str     0x000006fd       0x14 UARTCommands.o
                                 0x1c4 (size before relaxing)
 
-.debug_loc      0x00000000      0xd88
+.debug_loc      0x00000000      0xd44
  *(.debug_loc)
  .debug_loc     0x00000000      0x64c HY32D.o
  .debug_loc     0x0000064c      0x1f7 main.o
  .debug_loc     0x00000843      0x290 misc.o
- .debug_loc     0x00000ad3      0x226 SRAM.o
- .debug_loc     0x00000cf9       0x8f UART.o
+ .debug_loc     0x00000ad3      0x1e2 SRAM.o
+ .debug_loc     0x00000cb5       0x8f UART.o
 
 .debug_macinfo
  *(.debug_macinfo)

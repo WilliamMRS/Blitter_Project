@@ -52,7 +52,7 @@ void initHY32D(void){
 	Prereq: Set CS_LOW first.
 */
 void writeIndex(unsigned short index){
-	DC_LOW; // DC LOW
+	DC_LOW; // DC LOW - BEWARE, you may need to set this to high after, but not always.
 	RD_HIGH; // RD High (for good measure? can be omitted as RD should always be high)
 	D0_D7 = index; // IO Write
 	wrSignal();

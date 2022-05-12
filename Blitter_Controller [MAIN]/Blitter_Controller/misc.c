@@ -36,6 +36,7 @@ uint8_t toHex(uint8_t number) {
 	}
 }
 
+// experimental to say the least
 void transmitInt(uint32_t value){
 		uint8_t hByte;
 		uint8_t mByte;

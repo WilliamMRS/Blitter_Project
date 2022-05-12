@@ -57,7 +57,7 @@
 #define CS 6
 #define BLT_EN 7
 
-// macros
+// Macros PORTB
 #define WR_BLT_CLK_HIGH PORTB |= (1 << WR_BLT_CLK)
 #define WR_BLT_CLK_LOW PORTB &= ~(1 << WR_BLT_CLK)
 #define CS_HIGH PORTB |= (1 << CS)
@@ -66,7 +66,7 @@
 #define RESET_LOW PORTB &= ~(1 << RESET)
 #define BLT_EN_HIGH PORTB |= (1 << BLT_EN)
 #define BLT_EN_LOW PORTB &= ~(1 << BLT_EN)
-
+// Macros PORTE
 #define RD_HIGH PORTE |= (1 << RD)
 #define RD_LOW PORTE &= ~(1 << RD)
 #define DC_HIGH PORTE |= (1 << DC)

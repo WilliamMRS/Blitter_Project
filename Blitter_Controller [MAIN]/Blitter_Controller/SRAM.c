@@ -22,7 +22,7 @@ void wrSignalSRAM(void){
 // SRAM sends data to D0-D15.
 void rdSignalSRAM(void){
 	SRAM_OE_LOW;
-	_delay_us(1); // TODO: needed?
+	//_delay_us(1); // needed?
 	SRAM_OE_HIGH;
 }
 
