@@ -33,8 +33,6 @@ Discarded input sections
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
- .text.blitFromSRAM
-                0x00000000        0x2 main.o
  .text          0x00000000        0x0 misc.o
  .data          0x00000000        0x0 misc.o
  .bss           0x00000000        0x0 misc.o
@@ -215,7 +213,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x8aa
+.text           0x00000000      0x8f6
  *(.vectors)
  .vectors       0x00000000       0x5c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169pa/avr5/crtatmega169pa.o
                 0x00000000                __vector_default
@@ -332,57 +330,54 @@ END GROUP
  .text.lcdStatusRead
                 0x000003b0       0xd2 HY32D.o
                 0x000003b0                lcdStatusRead
- .text.blitSignal
-                0x00000482        0xe main.o
-                0x00000482                blitSignal
  .text.loadDataToOutputLines
-                0x00000490       0x12 main.o
-                0x00000490                loadDataToOutputLines
+                0x00000482       0x12 main.o
+                0x00000482                loadDataToOutputLines
  .text.setExtraBlitIOToOutput
-                0x000004a2       0x2c main.o
-                0x000004a2                setExtraBlitIOToOutput
+                0x00000494       0x2c main.o
+                0x00000494                setExtraBlitIOToOutput
  .text.presetCountersToZero
-                0x000004ce       0x4a main.o
-                0x000004ce                presetCountersToZero
+                0x000004c0       0x56 main.o
+                0x000004c0                presetCountersToZero
  .text.wrSignalSRAM
-                0x00000518        0xe main.o
-                0x00000518                wrSignalSRAM
+                0x00000516       0x16 main.o
+                0x00000516                wrSignalSRAM
  .text.rdSignalSRAM
-                0x00000526        0xe main.o
-                0x00000526                rdSignalSRAM
+                0x0000052c       0x16 main.o
+                0x0000052c                rdSignalSRAM
  .text.readSRAM
-                0x00000534       0x2a main.o
-                0x00000534                readSRAM
+                0x00000542       0x6e main.o
+                0x00000542                readSRAM
  .text.writeSRAM
-                0x0000055e       0xcc main.o
-                0x0000055e                writeSRAM
- .text.main     0x0000062a       0x68 main.o
-                0x0000062a                main
+                0x000005b0       0xc6 main.o
+                0x000005b0                writeSRAM
+ .text.main     0x00000676       0x68 main.o
+                0x00000676                main
  .text.__vector_13
-                0x00000692       0xc0 main.o
-                0x00000692                __vector_13
- .text.toHex    0x00000752       0x38 misc.o
-                0x00000752                toHex
+                0x000006de       0xc0 main.o
+                0x000006de                __vector_13
+ .text.toHex    0x0000079e       0x38 misc.o
+                0x0000079e                toHex
  .text.initUART
-                0x0000078a       0x1c UART.o
-                0x0000078a                initUART
+                0x000007d6       0x1c UART.o
+                0x000007d6                initUART
  .text.puttyCompatibleCheck
-                0x000007a6       0x18 UART.o
-                0x000007a6                puttyCompatibleCheck
+                0x000007f2       0x18 UART.o
+                0x000007f2                puttyCompatibleCheck
  .text.transmitUART
-                0x000007be       0x2c UART.o
-                0x000007be                transmitUART
+                0x0000080a       0x2c UART.o
+                0x0000080a                transmitUART
  .text.systemCheck
-                0x000007ea       0x66 UARTCommands.o
-                0x000007ea                systemCheck
+                0x00000836       0x66 UARTCommands.o
+                0x00000836                systemCheck
  .text.startupMessage
-                0x00000850       0x56 UARTCommands.o
-                0x00000850                startupMessage
-                0x000008a6                . = ALIGN (0x2)
+                0x0000089c       0x56 UARTCommands.o
+                0x0000089c                startupMessage
+                0x000008f2                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000008a6        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x000008a6                _exit
-                0x000008a6                exit
+ .fini9         0x000008f2        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x000008f2                _exit
+                0x000008f2                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -401,11 +396,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000008a6        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x000008f2        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000008aa                _etext = .
+                0x000008f6                _etext = .
 
-.data           0x00800100        0x0 load address 0x000008aa
+.data           0x00800100        0x0 load address 0x000008f6
                 [!provide]                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -429,8 +424,8 @@ END GROUP
                 0x00800101                lData
                 0x00800102                hData
                 0x00800103                PROVIDE (__bss_end, .)
-                0x000008aa                __data_load_start = LOADADDR (.data)
-                0x000008aa                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000008f6                __data_load_start = LOADADDR (.data)
+                0x000008f6                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800103        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -505,77 +500,77 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x178
+.debug_aranges  0x00000000      0x168
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x90 HY32D.o
  .debug_aranges
-                0x00000090       0x70 main.o
+                0x00000090       0x60 main.o
  .debug_aranges
-                0x00000100       0x20 misc.o
+                0x000000f0       0x20 misc.o
  .debug_aranges
-                0x00000120       0x30 UART.o
+                0x00000110       0x30 UART.o
  .debug_aranges
-                0x00000150       0x28 UARTCommands.o
+                0x00000140       0x28 UARTCommands.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1d59
+.debug_info     0x00000000     0x1e1e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x7b6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169pa/avr5/crtatmega169pa.o
  .debug_info    0x000007b6      0xbea HY32D.o
- .debug_info    0x000013a0      0x4d3 main.o
- .debug_info    0x00001873       0xa6 misc.o
- .debug_info    0x00001919      0x134 UART.o
- .debug_info    0x00001a4d      0x30c UARTCommands.o
+ .debug_info    0x000013a0      0x598 main.o
+ .debug_info    0x00001938       0xa6 misc.o
+ .debug_info    0x000019de      0x134 UART.o
+ .debug_info    0x00001b12      0x30c UARTCommands.o
 
-.debug_abbrev   0x00000000      0xc66
+.debug_abbrev   0x00000000      0xc6e
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x74b C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169pa/avr5/crtatmega169pa.o
  .debug_abbrev  0x0000074b      0x1ab HY32D.o
- .debug_abbrev  0x000008f6      0x1bb main.o
- .debug_abbrev  0x00000ab1       0x71 misc.o
- .debug_abbrev  0x00000b22       0xbd UART.o
- .debug_abbrev  0x00000bdf       0x87 UARTCommands.o
+ .debug_abbrev  0x000008f6      0x1c3 main.o
+ .debug_abbrev  0x00000ab9       0x71 misc.o
+ .debug_abbrev  0x00000b2a       0xbd UART.o
+ .debug_abbrev  0x00000be7       0x87 UARTCommands.o
 
-.debug_line     0x00000000      0xea9
+.debug_line     0x00000000      0xed7
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x121 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169pa/avr5/crtatmega169pa.o
  .debug_line    0x00000121      0x5f5 HY32D.o
- .debug_line    0x00000716      0x4ab main.o
- .debug_line    0x00000bc1       0xfb misc.o
- .debug_line    0x00000cbc      0x145 UART.o
- .debug_line    0x00000e01       0xa8 UARTCommands.o
+ .debug_line    0x00000716      0x4d9 main.o
+ .debug_line    0x00000bef       0xfb misc.o
+ .debug_line    0x00000cea      0x145 UART.o
+ .debug_line    0x00000e2f       0xa8 UARTCommands.o
 
-.debug_frame    0x00000000      0x338
+.debug_frame    0x00000000      0x32c
  *(.debug_frame)
  .debug_frame   0x00000000      0x178 HY32D.o
- .debug_frame   0x00000178      0x124 main.o
- .debug_frame   0x0000029c       0x24 misc.o
- .debug_frame   0x000002c0       0x44 UART.o
- .debug_frame   0x00000304       0x34 UARTCommands.o
+ .debug_frame   0x00000178      0x118 main.o
+ .debug_frame   0x00000290       0x24 misc.o
+ .debug_frame   0x000002b4       0x44 UART.o
+ .debug_frame   0x000002f8       0x34 UARTCommands.o
 
-.debug_str      0x00000000      0x6e0
+.debug_str      0x00000000      0x6d7
  *(.debug_str)
  .debug_str     0x00000000      0x2b3 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega169pa/avr5/crtatmega169pa.o
  .debug_str     0x000002b3      0x2c0 HY32D.o
                                 0x2f9 (size before relaxing)
- .debug_str     0x00000573       0xe0 main.o
+ .debug_str     0x00000573       0xd7 main.o
                                 0x326 (size before relaxing)
- .debug_str     0x00000653       0x13 misc.o
+ .debug_str     0x0000064a       0x13 misc.o
                                 0x18f (size before relaxing)
- .debug_str     0x00000666       0x66 UART.o
+ .debug_str     0x0000065d       0x66 UART.o
                                 0x1fc (size before relaxing)
- .debug_str     0x000006cc       0x14 UARTCommands.o
+ .debug_str     0x000006c3       0x14 UARTCommands.o
                                 0x1b8 (size before relaxing)
 
-.debug_loc      0x00000000      0xabe
+.debug_loc      0x00000000      0xbb9
  *(.debug_loc)
  .debug_loc     0x00000000      0x6ef HY32D.o
- .debug_loc     0x000006ef      0x24d main.o
- .debug_loc     0x0000093c       0xf3 misc.o
- .debug_loc     0x00000a2f       0x8f UART.o
+ .debug_loc     0x000006ef      0x348 main.o
+ .debug_loc     0x00000a37       0xf3 misc.o
+ .debug_loc     0x00000b2a       0x8f UART.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -595,13 +590,13 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x128
+.debug_ranges   0x00000000      0x118
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x80 HY32D.o
- .debug_ranges  0x00000080       0x60 main.o
- .debug_ranges  0x000000e0       0x10 misc.o
- .debug_ranges  0x000000f0       0x20 UART.o
- .debug_ranges  0x00000110       0x18 UARTCommands.o
+ .debug_ranges  0x00000080       0x50 main.o
+ .debug_ranges  0x000000d0       0x10 misc.o
+ .debug_ranges  0x000000e0       0x20 UART.o
+ .debug_ranges  0x00000100       0x18 UARTCommands.o
 
 .debug_macro
  *(.debug_macro)

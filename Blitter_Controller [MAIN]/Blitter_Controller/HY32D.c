@@ -77,9 +77,6 @@ void writeToRegister(unsigned short index, unsigned short data){
 	CS_HIGH;
 }
 
-/*
-	This is doing the same as blitSignal
-*/
 void wrSignal(void){
 	WR_BLT_CLK_LOW;
 	WR_BLT_CLK_HIGH;

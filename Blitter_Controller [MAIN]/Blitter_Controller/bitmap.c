@@ -2,7 +2,7 @@
  * bitmap.c
  *
  * Created: 12/05/2022 13:04:03
- *  Author: willi
+ *  Author: William M. R. Schmidt
  */ 
 // 22500
 /*

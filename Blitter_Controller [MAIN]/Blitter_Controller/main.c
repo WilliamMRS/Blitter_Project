@@ -24,25 +24,6 @@ uint8_t remoteEcho = 0;
 unsigned char lData; // not redeclaring these variables increases performance a lot
 unsigned char hData;
 
-	// CS SRAM low
-	// CS LCD high
-	// Reset all counters (so they become 0).
-	// BLT_EN to enable counters. Send clk to increment counters.
-	// Write to SRAM by loading data to output lines (same as when writing to screen) then sending WR signal
-
-// same as wrSignal
-void blitSignal(void){
-	WR_BLT_CLK_LOW;
-	WR_BLT_CLK_HIGH;
-}
-
-void blitFromSRAM(void){
-	// Preset counters to 0.
-	// Sett BLT_EN enabled (enable counters)
-	// Sett CS_LOW (enabling both SRAM and Screen)
-	// Send blitSignal (this sends write signal to screen, and increments counters by 1)
-}
-
 void loadDataToOutputLines(unsigned short data){
 	lData = (data & 0xFF);
 	hData = ((data >> 8) & 0xFF);
@@ -75,56 +56,70 @@ void presetCountersToZero(void){
 	// Counter signal lines
 	RESET_HIGH; // Set CLR(BLT_RST)(PB0)(RESET) to HIGH
 	LOAD_LOW; // Set LOAD(PE3) to LOW
-	blitSignal();// Send blitsignal (aka a clk)
+	wrSignal();// Send blitsignal (aka a clk)
 	LOAD_HIGH;
+	SRAM_OE_HIGH;
+	SRAM_WE_HIGH;
 }
 
 void wrSignalSRAM(){
 	SRAM_WE_LOW;
+	_delay_us(1);
 	SRAM_WE_HIGH;
 }
 
 void rdSignalSRAM(){
 	SRAM_OE_LOW;
+	_delay_us(1);
 	SRAM_OE_HIGH;
 }
 
+// It looks like a write signal to the CLK ruins something ..
 void readSRAM(void){
-	presetCountersToZero();
-	CS_LOW;
-	BLT_EN_HIGH;
+	SRAM_WE_HIGH; // SRAM Write high (disabled)
+	presetCountersToZero(); // set counters to 0
 	
+	//BLT_RST, BLT_LD, BLT_EN should all be HIGH
+	//Then do BLT_CLK for it to count
+	
+	CS_LOW; // Select screen and SRAM
+	BLT_EN_HIGH; // counters enabled
+	
+	DC_HIGH;
+	writeIndex(0x22); // ensure writing to screenbuffer
 	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
-	rdSignalSRAM(); // SRAM OE goes HIGH-LOW-HIGH
-	blitSignal();
 	
-	CS_HIGH;
-	BLT_EN_LOW;
+	for(unsigned long int i = 0; i < (pixels); i++){
+		rdSignalSRAM(); // SRAM OE goes LOW-HIGH reading the SRAM values on the address specified by the counters to the screen.
+		wrSignal(); // counters increment by one and screen updates.
+	}
+	
+	CS_HIGH; // deselect screen and ram
+	BLT_EN_LOW; // counters disabled
 }
 
 void writeSRAM(void){
 	presetCountersToZero(); // Set counters to your desired value (up to 2^20, or about 1 million)
 	CS_LOW; // Select SRAM (and display)
 	BLT_EN_HIGH; // BLT_EN HIGH so the address gets incremented by each write.
-	SRAM_OE_HIGH; // Output enable to high (disabled). Isn't needed I think.
 	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.
-	// Loops with data to transfer. This is hardcoded for now.
+	// Loops with data to transfer. This is hardcoded for now
 	
 	DC_HIGH;
 	for(unsigned long int i = 0; i < (pixels/3); i++){
 		loadDataToOutputLines(Red);
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
-		blitSignal(); // counters increment by one.
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
 	}
 	for(unsigned long int i = 0; i < (pixels/3); i++){
 		loadDataToOutputLines(Green);
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
-		blitSignal(); // counters increment by one.
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
 	}
 	for(unsigned long int i = 0; i < (pixels/3); i++){
 		loadDataToOutputLines(Blue);
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
-		blitSignal(); // counters increment by one.
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
 	}
 	
 	CS_HIGH; // deselect LCD and SRAM
@@ -172,6 +167,8 @@ int main(void)
 		//_delay_ms(1000);
 		//statusRead();
 		/*TODO:
+		
+		Bug: Read - Blue - Test -> Makes test only draw white screen, then stop.
 		
 		R02h to fix display flicker. Do that after initialization.
 		
@@ -244,6 +241,8 @@ ISR(USART0_RX_vect){
 			readSRAM();
 		}else if(receivedByte == 'T'){
 			screenTest();
+		}else if(receivedByte == 'u'){
+			
 		}
 	// If echo is on, and the ASCII character is higher than 31, or Bell, Carriage Return, Line Feed or backspace, then echo the character. Other are filtered as to not get strange behavior from Putty.
 	}

@@ -3,31 +3,31 @@ Blitter_Controller.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  0000091e  2**0
+  0 .data         00000000  00800100  00800100  0000096a  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000008aa  00000000  00000000  00000074  2**1
+  1 .text         000008f6  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000003  00800100  00800100  0000091e  2**0
+  2 .bss          00000003  00800100  00800100  0000096a  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000091e  2**0
+  3 .comment      00000030  00000000  00000000  0000096a  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000950  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000099c  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000178  00000000  00000000  00000990  2**0
+  5 .debug_aranges 00000168  00000000  00000000  000009dc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001d59  00000000  00000000  00000b08  2**0
+  6 .debug_info   00001e1e  00000000  00000000  00000b44  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000c66  00000000  00000000  00002861  2**0
+  7 .debug_abbrev 00000c6e  00000000  00000000  00002962  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000ea9  00000000  00000000  000034c7  2**0
+  8 .debug_line   00000ed7  00000000  00000000  000035d0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000338  00000000  00000000  00004370  2**2
+  9 .debug_frame  0000032c  00000000  00000000  000044a8  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000006e0  00000000  00000000  000046a8  2**0
+ 10 .debug_str    000006d7  00000000  00000000  000047d4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000abe  00000000  00000000  00004d88  2**0
+ 11 .debug_loc    00000bb9  00000000  00000000  00004eab  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000128  00000000  00000000  00005846  2**0
+ 12 .debug_ranges 00000118  00000000  00000000  00005a64  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -46,7 +46,7 @@ Disassembly of section .text:
   28:	0c 94 40 00 	jmp	0x80	; 0x80 <__bad_interrupt>
   2c:	0c 94 40 00 	jmp	0x80	; 0x80 <__bad_interrupt>
   30:	0c 94 40 00 	jmp	0x80	; 0x80 <__bad_interrupt>
-  34:	0c 94 49 03 	jmp	0x692	; 0x692 <__vector_13>
+  34:	0c 94 6f 03 	jmp	0x6de	; 0x6de <__vector_13>
   38:	0c 94 40 00 	jmp	0x80	; 0x80 <__bad_interrupt>
   3c:	0c 94 40 00 	jmp	0x80	; 0x80 <__bad_interrupt>
   40:	0c 94 40 00 	jmp	0x80	; 0x80 <__bad_interrupt>
@@ -78,8 +78,8 @@ Disassembly of section .text:
   72:	a3 30       	cpi	r26, 0x03	; 3
   74:	b2 07       	cpc	r27, r18
   76:	e1 f7       	brne	.-8      	; 0x70 <.do_clear_bss_loop>
-  78:	0e 94 15 03 	call	0x62a	; 0x62a <main>
-  7c:	0c 94 53 04 	jmp	0x8a6	; 0x8a6 <_exit>
+  78:	0e 94 3b 03 	call	0x676	; 0x676 <main>
+  7c:	0c 94 79 04 	jmp	0x8f2	; 0x8f2 <_exit>
 
 00000080 <__bad_interrupt>:
   80:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -499,46 +499,46 @@ void lcdStatusRead(void){ // reads SR register
 	uint8_t ldata = (data & 0xFF);
 	transmitUART(CR);
  3ca:	8d e0       	ldi	r24, 0x0D	; 13
- 3cc:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 3cc:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('S'); 	transmitUART('C'); 	transmitUART('R'); transmitUART('E'); 	transmitUART('E');
  3d0:	83 e5       	ldi	r24, 0x53	; 83
- 3d2:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 3d2:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  3d6:	83 e4       	ldi	r24, 0x43	; 67
- 3d8:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 3d8:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  3dc:	82 e5       	ldi	r24, 0x52	; 82
- 3de:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 3de:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  3e2:	85 e4       	ldi	r24, 0x45	; 69
- 3e4:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 3e4:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  3e8:	85 e4       	ldi	r24, 0x45	; 69
- 3ea:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 3ea:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('N'); 	transmitUART(' '); transmitUART('S'); 	transmitUART('T'); transmitUART('A');
  3ee:	8e e4       	ldi	r24, 0x4E	; 78
- 3f0:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 3f0:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  3f4:	80 e2       	ldi	r24, 0x20	; 32
- 3f6:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 3f6:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  3fa:	83 e5       	ldi	r24, 0x53	; 83
- 3fc:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 3fc:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  400:	84 e5       	ldi	r24, 0x54	; 84
- 402:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 402:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  406:	81 e4       	ldi	r24, 0x41	; 65
- 408:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 408:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('T'); 	transmitUART('U'); transmitUART('S'); 	transmitUART(':'); transmitUART(' ');
  40c:	84 e5       	ldi	r24, 0x54	; 84
- 40e:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 40e:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  412:	85 e5       	ldi	r24, 0x55	; 85
- 414:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 414:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  418:	83 e5       	ldi	r24, 0x53	; 83
- 41a:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 41a:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  41e:	8a e3       	ldi	r24, 0x3A	; 58
- 420:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 420:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
  424:	80 e2       	ldi	r24, 0x20	; 32
- 426:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 426:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('0');
  42a:	80 e3       	ldi	r24, 0x30	; 48
- 42c:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 42c:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('x');
  430:	88 e7       	ldi	r24, 0x78	; 120
- 432:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 432:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	uint8_t udatauhex = ((udata >> 4) & 0x0F);
 	uint8_t udatalhex = (udata & 0x0F); // xxxx xxxx & 0000 1111 => xxxx 1001
  436:	1d 2f       	mov	r17, r29
@@ -547,12 +547,12 @@ void lcdStatusRead(void){ // reads SR register
  43a:	8d 2f       	mov	r24, r29
  43c:	82 95       	swap	r24
  43e:	8f 70       	andi	r24, 0x0F	; 15
- 440:	0e 94 a9 03 	call	0x752	; 0x752 <toHex>
- 444:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 440:	0e 94 cf 03 	call	0x79e	; 0x79e <toHex>
+ 444:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART(toHex(udatalhex));
  448:	81 2f       	mov	r24, r17
- 44a:	0e 94 a9 03 	call	0x752	; 0x752 <toHex>
- 44e:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 44a:	0e 94 cf 03 	call	0x79e	; 0x79e <toHex>
+ 44e:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	uint8_t ldatauhex = ((ldata >> 4) & 0x0F);
 	uint8_t ldatalhex = (ldata & 0x0F); // xxxx xxxx & 0000 1111 => xxxx 1001
  452:	dc 2f       	mov	r29, r28
@@ -561,15 +561,15 @@ void lcdStatusRead(void){ // reads SR register
  456:	8c 2f       	mov	r24, r28
  458:	82 95       	swap	r24
  45a:	8f 70       	andi	r24, 0x0F	; 15
- 45c:	0e 94 a9 03 	call	0x752	; 0x752 <toHex>
- 460:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 45c:	0e 94 cf 03 	call	0x79e	; 0x79e <toHex>
+ 460:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART(toHex(ldatalhex));
  464:	8d 2f       	mov	r24, r29
- 466:	0e 94 a9 03 	call	0x752	; 0x752 <toHex>
- 46a:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 466:	0e 94 cf 03 	call	0x79e	; 0x79e <toHex>
+ 46a:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART(CR);
  46e:	8d e0       	ldi	r24, 0x0D	; 13
- 470:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 470:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	CS_HIGH;
  474:	85 b1       	in	r24, 0x05	; 5
  476:	80 64       	ori	r24, 0x40	; 64
@@ -579,797 +579,850 @@ void lcdStatusRead(void){ // reads SR register
  47e:	1f 91       	pop	r17
  480:	08 95       	ret
 
-00000482 <blitSignal>:
-void blitSignal(void){
-	WR_BLT_CLK_LOW;
-	WR_BLT_CLK_HIGH;
-}
-
-void blitFromSRAM(void){
- 482:	85 b1       	in	r24, 0x05	; 5
- 484:	8f 7e       	andi	r24, 0xEF	; 239
- 486:	85 b9       	out	0x05, r24	; 5
- 488:	85 b1       	in	r24, 0x05	; 5
- 48a:	80 61       	ori	r24, 0x10	; 16
- 48c:	85 b9       	out	0x05, r24	; 5
- 48e:	08 95       	ret
-
-00000490 <loadDataToOutputLines>:
-	// Sett CS_LOW (enabling both SRAM and Screen)
-	// Send blitSignal (this sends write signal to screen, and increments counters by 1)
-}
+00000482 <loadDataToOutputLines>:
+uint8_t remoteEcho = 0;
+unsigned char lData; // not redeclaring these variables increases performance a lot
+unsigned char hData;
 
 void loadDataToOutputLines(unsigned short data){
 	lData = (data & 0xFF);
- 490:	80 93 01 01 	sts	0x0101, r24	; 0x800101 <lData>
+ 482:	80 93 01 01 	sts	0x0101, r24	; 0x800101 <lData>
 	hData = ((data >> 8) & 0xFF);
- 494:	90 93 02 01 	sts	0x0102, r25	; 0x800102 <hData>
+ 486:	90 93 02 01 	sts	0x0102, r25	; 0x800102 <hData>
 	D0_D7 = lData; // Write data to GPIO lines (lines should by default be output)
- 498:	82 b9       	out	0x02, r24	; 2
+ 48a:	82 b9       	out	0x02, r24	; 2
 	D8_D15 = hData;
- 49a:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <hData>
- 49e:	88 b9       	out	0x08, r24	; 8
- 4a0:	08 95       	ret
+ 48c:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <hData>
+ 490:	88 b9       	out	0x08, r24	; 8
+ 492:	08 95       	ret
 
-000004a2 <setExtraBlitIOToOutput>:
+00000494 <setExtraBlitIOToOutput>:
 }
 
 void setExtraBlitIOToOutput(void) {
 	// This can probably be done at startup/initialization
 	DDRE |= (1 << PE4); // Port 4 to output (/SRAM OE)	(D16)
- 4a2:	8d b1       	in	r24, 0x0d	; 13
- 4a4:	80 61       	ori	r24, 0x10	; 16
- 4a6:	8d b9       	out	0x0d, r24	; 13
+ 494:	8d b1       	in	r24, 0x0d	; 13
+ 496:	80 61       	ori	r24, 0x10	; 16
+ 498:	8d b9       	out	0x0d, r24	; 13
 	DDRE |= (1 << PE5); // Port 5 to output (/SRAM WE)	(D17)
- 4a8:	8d b1       	in	r24, 0x0d	; 13
- 4aa:	80 62       	ori	r24, 0x20	; 32
- 4ac:	8d b9       	out	0x0d, r24	; 13
+ 49a:	8d b1       	in	r24, 0x0d	; 13
+ 49c:	80 62       	ori	r24, 0x20	; 32
+ 49e:	8d b9       	out	0x0d, r24	; 13
 	DDRE |= (1 << PE6); // Port 6 to output (RD)			(D18)
- 4ae:	8d b1       	in	r24, 0x0d	; 13
- 4b0:	80 64       	ori	r24, 0x40	; 64
- 4b2:	8d b9       	out	0x0d, r24	; 13
+ 4a0:	8d b1       	in	r24, 0x0d	; 13
+ 4a2:	80 64       	ori	r24, 0x40	; 64
+ 4a4:	8d b9       	out	0x0d, r24	; 13
 	DDRE |= (1 << PE7); // Port 7 to output (DC)			(D19)
- 4b4:	8d b1       	in	r24, 0x0d	; 13
- 4b6:	80 68       	ori	r24, 0x80	; 128
- 4b8:	8d b9       	out	0x0d, r24	; 13
+ 4a6:	8d b1       	in	r24, 0x0d	; 13
+ 4a8:	80 68       	ori	r24, 0x80	; 128
+ 4aa:	8d b9       	out	0x0d, r24	; 13
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 4ba:	2f ef       	ldi	r18, 0xFF	; 255
- 4bc:	8f e3       	ldi	r24, 0x3F	; 63
- 4be:	92 e0       	ldi	r25, 0x02	; 2
- 4c0:	21 50       	subi	r18, 0x01	; 1
- 4c2:	80 40       	sbci	r24, 0x00	; 0
- 4c4:	90 40       	sbci	r25, 0x00	; 0
- 4c6:	e1 f7       	brne	.-8      	; 0x4c0 <setExtraBlitIOToOutput+0x1e>
- 4c8:	00 c0       	rjmp	.+0      	; 0x4ca <setExtraBlitIOToOutput+0x28>
- 4ca:	00 00       	nop
- 4cc:	08 95       	ret
+ 4ac:	2f ef       	ldi	r18, 0xFF	; 255
+ 4ae:	8f e3       	ldi	r24, 0x3F	; 63
+ 4b0:	92 e0       	ldi	r25, 0x02	; 2
+ 4b2:	21 50       	subi	r18, 0x01	; 1
+ 4b4:	80 40       	sbci	r24, 0x00	; 0
+ 4b6:	90 40       	sbci	r25, 0x00	; 0
+ 4b8:	e1 f7       	brne	.-8      	; 0x4b2 <setExtraBlitIOToOutput+0x1e>
+ 4ba:	00 c0       	rjmp	.+0      	; 0x4bc <setExtraBlitIOToOutput+0x28>
+ 4bc:	00 00       	nop
+ 4be:	08 95       	ret
 
-000004ce <presetCountersToZero>:
+000004c0 <presetCountersToZero>:
 	_delay_ms(100); // Not sure if this is necessary, check later
 }
 
 // BLT_RST (to reset counter values is also an option. See counter datasheet.
 void presetCountersToZero(void){
 	CS_HIGH; // Deselect LCD and SRAM
- 4ce:	85 b1       	in	r24, 0x05	; 5
- 4d0:	80 64       	ori	r24, 0x40	; 64
- 4d2:	85 b9       	out	0x05, r24	; 5
+ 4c0:	85 b1       	in	r24, 0x05	; 5
+ 4c2:	80 64       	ori	r24, 0x40	; 64
+ 4c4:	85 b9       	out	0x05, r24	; 5
 	setIOtoOutput(); // Set all lines to output
- 4d4:	0e 94 72 00 	call	0xe4	; 0xe4 <setIOtoOutput>
+ 4c6:	0e 94 72 00 	call	0xe4	; 0xe4 <setIOtoOutput>
 	setExtraBlitIOToOutput();
- 4d8:	0e 94 51 02 	call	0x4a2	; 0x4a2 <setExtraBlitIOToOutput>
+ 4ca:	0e 94 4a 02 	call	0x494	; 0x494 <setExtraBlitIOToOutput>
 	// Give all outlines a value of 0
 	D0_D7 = 0x00;
- 4dc:	12 b8       	out	0x02, r1	; 2
+ 4ce:	12 b8       	out	0x02, r1	; 2
 	D8_D15 = 0x00;
- 4de:	18 b8       	out	0x08, r1	; 8
+ 4d0:	18 b8       	out	0x08, r1	; 8
 	PORTE &= ~(1 << PE4);
- 4e0:	8e b1       	in	r24, 0x0e	; 14
- 4e2:	8f 7e       	andi	r24, 0xEF	; 239
- 4e4:	8e b9       	out	0x0e, r24	; 14
+ 4d2:	8e b1       	in	r24, 0x0e	; 14
+ 4d4:	8f 7e       	andi	r24, 0xEF	; 239
+ 4d6:	8e b9       	out	0x0e, r24	; 14
 	PORTE &= ~(1 << PE5);
- 4e6:	8e b1       	in	r24, 0x0e	; 14
- 4e8:	8f 7d       	andi	r24, 0xDF	; 223
- 4ea:	8e b9       	out	0x0e, r24	; 14
+ 4d8:	8e b1       	in	r24, 0x0e	; 14
+ 4da:	8f 7d       	andi	r24, 0xDF	; 223
+ 4dc:	8e b9       	out	0x0e, r24	; 14
 	PORTE &= ~(1 << PE6);
- 4ec:	8e b1       	in	r24, 0x0e	; 14
- 4ee:	8f 7b       	andi	r24, 0xBF	; 191
- 4f0:	8e b9       	out	0x0e, r24	; 14
+ 4de:	8e b1       	in	r24, 0x0e	; 14
+ 4e0:	8f 7b       	andi	r24, 0xBF	; 191
+ 4e2:	8e b9       	out	0x0e, r24	; 14
 	PORTE &= ~(1 << PE7);
- 4f2:	8e b1       	in	r24, 0x0e	; 14
- 4f4:	8f 77       	andi	r24, 0x7F	; 127
- 4f6:	8e b9       	out	0x0e, r24	; 14
- 4f8:	83 e3       	ldi	r24, 0x33	; 51
- 4fa:	97 e0       	ldi	r25, 0x07	; 7
- 4fc:	01 97       	sbiw	r24, 0x01	; 1
- 4fe:	f1 f7       	brne	.-4      	; 0x4fc <presetCountersToZero+0x2e>
+ 4e4:	8e b1       	in	r24, 0x0e	; 14
+ 4e6:	8f 77       	andi	r24, 0x7F	; 127
+ 4e8:	8e b9       	out	0x0e, r24	; 14
+ 4ea:	83 e3       	ldi	r24, 0x33	; 51
+ 4ec:	97 e0       	ldi	r25, 0x07	; 7
+ 4ee:	01 97       	sbiw	r24, 0x01	; 1
+ 4f0:	f1 f7       	brne	.-4      	; 0x4ee <presetCountersToZero+0x2e>
 	_delay_ms(1);
 	// Counter signal lines
 	RESET_HIGH; // Set CLR(BLT_RST)(PB0)(RESET) to HIGH
- 500:	85 b1       	in	r24, 0x05	; 5
- 502:	81 60       	ori	r24, 0x01	; 1
- 504:	85 b9       	out	0x05, r24	; 5
+ 4f2:	85 b1       	in	r24, 0x05	; 5
+ 4f4:	81 60       	ori	r24, 0x01	; 1
+ 4f6:	85 b9       	out	0x05, r24	; 5
 	LOAD_LOW; // Set LOAD(PE3) to LOW
- 506:	8e b1       	in	r24, 0x0e	; 14
- 508:	87 7f       	andi	r24, 0xF7	; 247
- 50a:	8e b9       	out	0x0e, r24	; 14
-	blitSignal();// Send blitsignal (aka a clk)
- 50c:	0e 94 41 02 	call	0x482	; 0x482 <blitSignal>
+ 4f8:	8e b1       	in	r24, 0x0e	; 14
+ 4fa:	87 7f       	andi	r24, 0xF7	; 247
+ 4fc:	8e b9       	out	0x0e, r24	; 14
+	wrSignal();// Send blitsignal (aka a clk)
+ 4fe:	0e 94 42 00 	call	0x84	; 0x84 <wrSignal>
 	LOAD_HIGH;
- 510:	8e b1       	in	r24, 0x0e	; 14
- 512:	88 60       	ori	r24, 0x08	; 8
- 514:	8e b9       	out	0x0e, r24	; 14
- 516:	08 95       	ret
+ 502:	8e b1       	in	r24, 0x0e	; 14
+ 504:	88 60       	ori	r24, 0x08	; 8
+ 506:	8e b9       	out	0x0e, r24	; 14
+	SRAM_OE_HIGH;
+ 508:	8e b1       	in	r24, 0x0e	; 14
+ 50a:	80 61       	ori	r24, 0x10	; 16
+ 50c:	8e b9       	out	0x0e, r24	; 14
+	SRAM_WE_HIGH;
+ 50e:	8e b1       	in	r24, 0x0e	; 14
+ 510:	80 62       	ori	r24, 0x20	; 32
+ 512:	8e b9       	out	0x0e, r24	; 14
+ 514:	08 95       	ret
 
-00000518 <wrSignalSRAM>:
+00000516 <wrSignalSRAM>:
 }
 
 void wrSignalSRAM(){
 	SRAM_WE_LOW;
- 518:	8e b1       	in	r24, 0x0e	; 14
- 51a:	8f 7d       	andi	r24, 0xDF	; 223
- 51c:	8e b9       	out	0x0e, r24	; 14
-	SRAM_WE_HIGH;
- 51e:	8e b1       	in	r24, 0x0e	; 14
- 520:	80 62       	ori	r24, 0x20	; 32
- 522:	8e b9       	out	0x0e, r24	; 14
- 524:	08 95       	ret
+ 516:	8e b1       	in	r24, 0x0e	; 14
+ 518:	8f 7d       	andi	r24, 0xDF	; 223
+ 51a:	8e b9       	out	0x0e, r24	; 14
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
 
-00000526 <rdSignalSRAM>:
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 51c:	82 e0       	ldi	r24, 0x02	; 2
+ 51e:	8a 95       	dec	r24
+ 520:	f1 f7       	brne	.-4      	; 0x51e <wrSignalSRAM+0x8>
+ 522:	00 c0       	rjmp	.+0      	; 0x524 <wrSignalSRAM+0xe>
+	_delay_us(1);
+	SRAM_WE_HIGH;
+ 524:	8e b1       	in	r24, 0x0e	; 14
+ 526:	80 62       	ori	r24, 0x20	; 32
+ 528:	8e b9       	out	0x0e, r24	; 14
+ 52a:	08 95       	ret
+
+0000052c <rdSignalSRAM>:
 }
 
 void rdSignalSRAM(){
 	SRAM_OE_LOW;
- 526:	8e b1       	in	r24, 0x0e	; 14
- 528:	8f 7e       	andi	r24, 0xEF	; 239
- 52a:	8e b9       	out	0x0e, r24	; 14
-	SRAM_OE_HIGH;
  52c:	8e b1       	in	r24, 0x0e	; 14
- 52e:	80 61       	ori	r24, 0x10	; 16
+ 52e:	8f 7e       	andi	r24, 0xEF	; 239
  530:	8e b9       	out	0x0e, r24	; 14
- 532:	08 95       	ret
+ 532:	82 e0       	ldi	r24, 0x02	; 2
+ 534:	8a 95       	dec	r24
+ 536:	f1 f7       	brne	.-4      	; 0x534 <rdSignalSRAM+0x8>
+ 538:	00 c0       	rjmp	.+0      	; 0x53a <rdSignalSRAM+0xe>
+	_delay_us(1);
+	SRAM_OE_HIGH;
+ 53a:	8e b1       	in	r24, 0x0e	; 14
+ 53c:	80 61       	ori	r24, 0x10	; 16
+ 53e:	8e b9       	out	0x0e, r24	; 14
+ 540:	08 95       	ret
 
-00000534 <readSRAM>:
+00000542 <readSRAM>:
 }
 
+// It looks like a write signal to the CLK ruins something ..
 void readSRAM(void){
-	presetCountersToZero();
- 534:	0e 94 67 02 	call	0x4ce	; 0x4ce <presetCountersToZero>
-	CS_LOW;
- 538:	85 b1       	in	r24, 0x05	; 5
- 53a:	8f 7b       	andi	r24, 0xBF	; 191
- 53c:	85 b9       	out	0x05, r24	; 5
-	BLT_EN_HIGH;
- 53e:	85 b1       	in	r24, 0x05	; 5
- 540:	80 68       	ori	r24, 0x80	; 128
- 542:	85 b9       	out	0x05, r24	; 5
+ 542:	cf 92       	push	r12
+ 544:	df 92       	push	r13
+ 546:	ef 92       	push	r14
+ 548:	ff 92       	push	r15
+	SRAM_WE_HIGH; // SRAM Write high (disabled)
+ 54a:	8e b1       	in	r24, 0x0e	; 14
+ 54c:	80 62       	ori	r24, 0x20	; 32
+ 54e:	8e b9       	out	0x0e, r24	; 14
+	presetCountersToZero(); // set counters to 0
+ 550:	0e 94 60 02 	call	0x4c0	; 0x4c0 <presetCountersToZero>
+	CS_LOW; // Select screen and SRAM
+ 554:	85 b1       	in	r24, 0x05	; 5
+ 556:	8f 7b       	andi	r24, 0xBF	; 191
+ 558:	85 b9       	out	0x05, r24	; 5
+	BLT_EN_HIGH; // counters enabled
+ 55a:	85 b1       	in	r24, 0x05	; 5
+ 55c:	80 68       	ori	r24, 0x80	; 128
+ 55e:	85 b9       	out	0x05, r24	; 5
 	
+	DC_HIGH;
+ 560:	8e b1       	in	r24, 0x0e	; 14
+ 562:	80 68       	ori	r24, 0x80	; 128
+ 564:	8e b9       	out	0x0e, r24	; 14
+	writeIndex(0x22); // ensure writing to screenbuffer
+ 566:	82 e2       	ldi	r24, 0x22	; 34
+ 568:	90 e0       	ldi	r25, 0x00	; 0
+ 56a:	0e 94 49 00 	call	0x92	; 0x92 <writeIndex>
 	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
- 544:	0e 94 76 00 	call	0xec	; 0xec <setIOtoInput>
-	rdSignalSRAM(); // SRAM OE goes HIGH-LOW-HIGH
- 548:	0e 94 93 02 	call	0x526	; 0x526 <rdSignalSRAM>
-	blitSignal();
- 54c:	0e 94 41 02 	call	0x482	; 0x482 <blitSignal>
+ 56e:	0e 94 76 00 	call	0xec	; 0xec <setIOtoInput>
 	
-	CS_HIGH;
- 550:	85 b1       	in	r24, 0x05	; 5
- 552:	80 64       	ori	r24, 0x40	; 64
- 554:	85 b9       	out	0x05, r24	; 5
-	BLT_EN_LOW;
- 556:	85 b1       	in	r24, 0x05	; 5
- 558:	8f 77       	andi	r24, 0x7F	; 127
- 55a:	85 b9       	out	0x05, r24	; 5
- 55c:	08 95       	ret
-
-0000055e <writeSRAM>:
+	for(unsigned long int i = 0; i < (pixels); i++){
+ 572:	c1 2c       	mov	r12, r1
+ 574:	d1 2c       	mov	r13, r1
+ 576:	76 01       	movw	r14, r12
+ 578:	09 c0       	rjmp	.+18     	; 0x58c <readSRAM+0x4a>
+		rdSignalSRAM(); // SRAM OE goes LOW-HIGH reading the SRAM values on the address specified by the counters to the screen.
+ 57a:	0e 94 96 02 	call	0x52c	; 0x52c <rdSignalSRAM>
+		wrSignal(); // counters increment by one and screen updates.
+ 57e:	0e 94 42 00 	call	0x84	; 0x84 <wrSignal>
+	
+	DC_HIGH;
+	writeIndex(0x22); // ensure writing to screenbuffer
+	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
+	
+	for(unsigned long int i = 0; i < (pixels); i++){
+ 582:	8f ef       	ldi	r24, 0xFF	; 255
+ 584:	c8 1a       	sub	r12, r24
+ 586:	d8 0a       	sbc	r13, r24
+ 588:	e8 0a       	sbc	r14, r24
+ 58a:	f8 0a       	sbc	r15, r24
+ 58c:	c1 14       	cp	r12, r1
+ 58e:	8c e2       	ldi	r24, 0x2C	; 44
+ 590:	d8 06       	cpc	r13, r24
+ 592:	81 e0       	ldi	r24, 0x01	; 1
+ 594:	e8 06       	cpc	r14, r24
+ 596:	f1 04       	cpc	r15, r1
+ 598:	80 f3       	brcs	.-32     	; 0x57a <readSRAM+0x38>
+		rdSignalSRAM(); // SRAM OE goes LOW-HIGH reading the SRAM values on the address specified by the counters to the screen.
+		wrSignal(); // counters increment by one and screen updates.
+	}
+	
+	CS_HIGH; // deselect screen and ram
+ 59a:	85 b1       	in	r24, 0x05	; 5
+ 59c:	80 64       	ori	r24, 0x40	; 64
+ 59e:	85 b9       	out	0x05, r24	; 5
+	BLT_EN_LOW; // counters disabled
+ 5a0:	85 b1       	in	r24, 0x05	; 5
+ 5a2:	8f 77       	andi	r24, 0x7F	; 127
+ 5a4:	85 b9       	out	0x05, r24	; 5
 }
+ 5a6:	ff 90       	pop	r15
+ 5a8:	ef 90       	pop	r14
+ 5aa:	df 90       	pop	r13
+ 5ac:	cf 90       	pop	r12
+ 5ae:	08 95       	ret
+
+000005b0 <writeSRAM>:
 
 void writeSRAM(void){
- 55e:	cf 92       	push	r12
- 560:	df 92       	push	r13
- 562:	ef 92       	push	r14
- 564:	ff 92       	push	r15
+ 5b0:	cf 92       	push	r12
+ 5b2:	df 92       	push	r13
+ 5b4:	ef 92       	push	r14
+ 5b6:	ff 92       	push	r15
 	presetCountersToZero(); // Set counters to your desired value (up to 2^20, or about 1 million)
- 566:	0e 94 67 02 	call	0x4ce	; 0x4ce <presetCountersToZero>
+ 5b8:	0e 94 60 02 	call	0x4c0	; 0x4c0 <presetCountersToZero>
 	CS_LOW; // Select SRAM (and display)
- 56a:	85 b1       	in	r24, 0x05	; 5
- 56c:	8f 7b       	andi	r24, 0xBF	; 191
- 56e:	85 b9       	out	0x05, r24	; 5
+ 5bc:	85 b1       	in	r24, 0x05	; 5
+ 5be:	8f 7b       	andi	r24, 0xBF	; 191
+ 5c0:	85 b9       	out	0x05, r24	; 5
 	BLT_EN_HIGH; // BLT_EN HIGH so the address gets incremented by each write.
- 570:	85 b1       	in	r24, 0x05	; 5
- 572:	80 68       	ori	r24, 0x80	; 128
- 574:	85 b9       	out	0x05, r24	; 5
-	SRAM_OE_HIGH; // Output enable to high (disabled). Isn't needed I think.
- 576:	8e b1       	in	r24, 0x0e	; 14
- 578:	80 61       	ori	r24, 0x10	; 16
- 57a:	8e b9       	out	0x0e, r24	; 14
+ 5c2:	85 b1       	in	r24, 0x05	; 5
+ 5c4:	80 68       	ori	r24, 0x80	; 128
+ 5c6:	85 b9       	out	0x05, r24	; 5
 	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.
- 57c:	82 e2       	ldi	r24, 0x22	; 34
- 57e:	90 e0       	ldi	r25, 0x00	; 0
- 580:	0e 94 49 00 	call	0x92	; 0x92 <writeIndex>
-	// Loops with data to transfer. This is hardcoded for now.
+ 5c8:	82 e2       	ldi	r24, 0x22	; 34
+ 5ca:	90 e0       	ldi	r25, 0x00	; 0
+ 5cc:	0e 94 49 00 	call	0x92	; 0x92 <writeIndex>
+	// Loops with data to transfer. This is hardcoded for now
 	
 	DC_HIGH;
- 584:	8e b1       	in	r24, 0x0e	; 14
- 586:	80 68       	ori	r24, 0x80	; 128
- 588:	8e b9       	out	0x0e, r24	; 14
+ 5d0:	8e b1       	in	r24, 0x0e	; 14
+ 5d2:	80 68       	ori	r24, 0x80	; 128
+ 5d4:	8e b9       	out	0x0e, r24	; 14
 	for(unsigned long int i = 0; i < (pixels/3); i++){
- 58a:	c1 2c       	mov	r12, r1
- 58c:	d1 2c       	mov	r13, r1
- 58e:	76 01       	movw	r14, r12
- 590:	0d c0       	rjmp	.+26     	; 0x5ac <writeSRAM+0x4e>
+ 5d6:	c1 2c       	mov	r12, r1
+ 5d8:	d1 2c       	mov	r13, r1
+ 5da:	76 01       	movw	r14, r12
+ 5dc:	0d c0       	rjmp	.+26     	; 0x5f8 <writeSRAM+0x48>
 		loadDataToOutputLines(Red);
- 592:	8f e1       	ldi	r24, 0x1F	; 31
- 594:	90 e0       	ldi	r25, 0x00	; 0
- 596:	0e 94 48 02 	call	0x490	; 0x490 <loadDataToOutputLines>
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
- 59a:	0e 94 8c 02 	call	0x518	; 0x518 <wrSignalSRAM>
-		blitSignal(); // counters increment by one.
- 59e:	0e 94 41 02 	call	0x482	; 0x482 <blitSignal>
-	SRAM_OE_HIGH; // Output enable to high (disabled). Isn't needed I think.
+ 5de:	8f e1       	ldi	r24, 0x1F	; 31
+ 5e0:	90 e0       	ldi	r25, 0x00	; 0
+ 5e2:	0e 94 41 02 	call	0x482	; 0x482 <loadDataToOutputLines>
+		wrSignalSRAM(); // WriteEnable to SRAM
+ 5e6:	0e 94 8b 02 	call	0x516	; 0x516 <wrSignalSRAM>
+		wrSignal(); // counters increment by one.
+ 5ea:	0e 94 42 00 	call	0x84	; 0x84 <wrSignal>
+	BLT_EN_HIGH; // BLT_EN HIGH so the address gets incremented by each write.
 	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.
-	// Loops with data to transfer. This is hardcoded for now.
+	// Loops with data to transfer. This is hardcoded for now
 	
 	DC_HIGH;
 	for(unsigned long int i = 0; i < (pixels/3); i++){
- 5a2:	8f ef       	ldi	r24, 0xFF	; 255
- 5a4:	c8 1a       	sub	r12, r24
- 5a6:	d8 0a       	sbc	r13, r24
- 5a8:	e8 0a       	sbc	r14, r24
- 5aa:	f8 0a       	sbc	r15, r24
- 5ac:	c1 14       	cp	r12, r1
- 5ae:	84 e6       	ldi	r24, 0x64	; 100
- 5b0:	d8 06       	cpc	r13, r24
- 5b2:	e1 04       	cpc	r14, r1
- 5b4:	f1 04       	cpc	r15, r1
- 5b6:	68 f3       	brcs	.-38     	; 0x592 <writeSRAM+0x34>
- 5b8:	c1 2c       	mov	r12, r1
- 5ba:	d1 2c       	mov	r13, r1
- 5bc:	76 01       	movw	r14, r12
- 5be:	0d c0       	rjmp	.+26     	; 0x5da <writeSRAM+0x7c>
+ 5ee:	8f ef       	ldi	r24, 0xFF	; 255
+ 5f0:	c8 1a       	sub	r12, r24
+ 5f2:	d8 0a       	sbc	r13, r24
+ 5f4:	e8 0a       	sbc	r14, r24
+ 5f6:	f8 0a       	sbc	r15, r24
+ 5f8:	c1 14       	cp	r12, r1
+ 5fa:	84 e6       	ldi	r24, 0x64	; 100
+ 5fc:	d8 06       	cpc	r13, r24
+ 5fe:	e1 04       	cpc	r14, r1
+ 600:	f1 04       	cpc	r15, r1
+ 602:	68 f3       	brcs	.-38     	; 0x5de <writeSRAM+0x2e>
+ 604:	c1 2c       	mov	r12, r1
+ 606:	d1 2c       	mov	r13, r1
+ 608:	76 01       	movw	r14, r12
+ 60a:	0d c0       	rjmp	.+26     	; 0x626 <writeSRAM+0x76>
 		loadDataToOutputLines(Red);
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
-		blitSignal(); // counters increment by one.
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
 	}
 	for(unsigned long int i = 0; i < (pixels/3); i++){
 		loadDataToOutputLines(Green);
- 5c0:	80 ee       	ldi	r24, 0xE0	; 224
- 5c2:	97 e0       	ldi	r25, 0x07	; 7
- 5c4:	0e 94 48 02 	call	0x490	; 0x490 <loadDataToOutputLines>
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
- 5c8:	0e 94 8c 02 	call	0x518	; 0x518 <wrSignalSRAM>
-		blitSignal(); // counters increment by one.
- 5cc:	0e 94 41 02 	call	0x482	; 0x482 <blitSignal>
+ 60c:	80 ee       	ldi	r24, 0xE0	; 224
+ 60e:	97 e0       	ldi	r25, 0x07	; 7
+ 610:	0e 94 41 02 	call	0x482	; 0x482 <loadDataToOutputLines>
+		wrSignalSRAM(); // WriteEnable to SRAM
+ 614:	0e 94 8b 02 	call	0x516	; 0x516 <wrSignalSRAM>
+		wrSignal(); // counters increment by one.
+ 618:	0e 94 42 00 	call	0x84	; 0x84 <wrSignal>
 	for(unsigned long int i = 0; i < (pixels/3); i++){
 		loadDataToOutputLines(Red);
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
-		blitSignal(); // counters increment by one.
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
 	}
 	for(unsigned long int i = 0; i < (pixels/3); i++){
- 5d0:	8f ef       	ldi	r24, 0xFF	; 255
- 5d2:	c8 1a       	sub	r12, r24
- 5d4:	d8 0a       	sbc	r13, r24
- 5d6:	e8 0a       	sbc	r14, r24
- 5d8:	f8 0a       	sbc	r15, r24
- 5da:	c1 14       	cp	r12, r1
- 5dc:	84 e6       	ldi	r24, 0x64	; 100
- 5de:	d8 06       	cpc	r13, r24
- 5e0:	e1 04       	cpc	r14, r1
- 5e2:	f1 04       	cpc	r15, r1
- 5e4:	68 f3       	brcs	.-38     	; 0x5c0 <writeSRAM+0x62>
- 5e6:	c1 2c       	mov	r12, r1
- 5e8:	d1 2c       	mov	r13, r1
- 5ea:	76 01       	movw	r14, r12
- 5ec:	0d c0       	rjmp	.+26     	; 0x608 <writeSRAM+0xaa>
+ 61c:	8f ef       	ldi	r24, 0xFF	; 255
+ 61e:	c8 1a       	sub	r12, r24
+ 620:	d8 0a       	sbc	r13, r24
+ 622:	e8 0a       	sbc	r14, r24
+ 624:	f8 0a       	sbc	r15, r24
+ 626:	c1 14       	cp	r12, r1
+ 628:	84 e6       	ldi	r24, 0x64	; 100
+ 62a:	d8 06       	cpc	r13, r24
+ 62c:	e1 04       	cpc	r14, r1
+ 62e:	f1 04       	cpc	r15, r1
+ 630:	68 f3       	brcs	.-38     	; 0x60c <writeSRAM+0x5c>
+ 632:	c1 2c       	mov	r12, r1
+ 634:	d1 2c       	mov	r13, r1
+ 636:	76 01       	movw	r14, r12
+ 638:	0d c0       	rjmp	.+26     	; 0x654 <writeSRAM+0xa4>
 		loadDataToOutputLines(Green);
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
-		blitSignal(); // counters increment by one.
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
 	}
 	for(unsigned long int i = 0; i < (pixels/3); i++){
 		loadDataToOutputLines(Blue);
- 5ee:	80 e0       	ldi	r24, 0x00	; 0
- 5f0:	98 ef       	ldi	r25, 0xF8	; 248
- 5f2:	0e 94 48 02 	call	0x490	; 0x490 <loadDataToOutputLines>
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
- 5f6:	0e 94 8c 02 	call	0x518	; 0x518 <wrSignalSRAM>
-		blitSignal(); // counters increment by one.
- 5fa:	0e 94 41 02 	call	0x482	; 0x482 <blitSignal>
+ 63a:	80 e0       	ldi	r24, 0x00	; 0
+ 63c:	98 ef       	ldi	r25, 0xF8	; 248
+ 63e:	0e 94 41 02 	call	0x482	; 0x482 <loadDataToOutputLines>
+		wrSignalSRAM(); // WriteEnable to SRAM
+ 642:	0e 94 8b 02 	call	0x516	; 0x516 <wrSignalSRAM>
+		wrSignal(); // counters increment by one.
+ 646:	0e 94 42 00 	call	0x84	; 0x84 <wrSignal>
 	for(unsigned long int i = 0; i < (pixels/3); i++){
 		loadDataToOutputLines(Green);
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
-		blitSignal(); // counters increment by one.
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
 	}
 	for(unsigned long int i = 0; i < (pixels/3); i++){
- 5fe:	8f ef       	ldi	r24, 0xFF	; 255
- 600:	c8 1a       	sub	r12, r24
- 602:	d8 0a       	sbc	r13, r24
- 604:	e8 0a       	sbc	r14, r24
- 606:	f8 0a       	sbc	r15, r24
- 608:	c1 14       	cp	r12, r1
- 60a:	84 e6       	ldi	r24, 0x64	; 100
- 60c:	d8 06       	cpc	r13, r24
- 60e:	e1 04       	cpc	r14, r1
- 610:	f1 04       	cpc	r15, r1
- 612:	68 f3       	brcs	.-38     	; 0x5ee <writeSRAM+0x90>
+ 64a:	8f ef       	ldi	r24, 0xFF	; 255
+ 64c:	c8 1a       	sub	r12, r24
+ 64e:	d8 0a       	sbc	r13, r24
+ 650:	e8 0a       	sbc	r14, r24
+ 652:	f8 0a       	sbc	r15, r24
+ 654:	c1 14       	cp	r12, r1
+ 656:	84 e6       	ldi	r24, 0x64	; 100
+ 658:	d8 06       	cpc	r13, r24
+ 65a:	e1 04       	cpc	r14, r1
+ 65c:	f1 04       	cpc	r15, r1
+ 65e:	68 f3       	brcs	.-38     	; 0x63a <writeSRAM+0x8a>
 		loadDataToOutputLines(Blue);
-		wrSignalSRAM(); // WriteEnable to SRAM (this increments internal address by 1)
-		blitSignal(); // counters increment by one.
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
 	}
 	
 	CS_HIGH; // deselect LCD and SRAM
- 614:	85 b1       	in	r24, 0x05	; 5
- 616:	80 64       	ori	r24, 0x40	; 64
- 618:	85 b9       	out	0x05, r24	; 5
+ 660:	85 b1       	in	r24, 0x05	; 5
+ 662:	80 64       	ori	r24, 0x40	; 64
+ 664:	85 b9       	out	0x05, r24	; 5
 	BLT_EN_LOW;
- 61a:	85 b1       	in	r24, 0x05	; 5
- 61c:	8f 77       	andi	r24, 0x7F	; 127
- 61e:	85 b9       	out	0x05, r24	; 5
+ 666:	85 b1       	in	r24, 0x05	; 5
+ 668:	8f 77       	andi	r24, 0x7F	; 127
+ 66a:	85 b9       	out	0x05, r24	; 5
 }
- 620:	ff 90       	pop	r15
- 622:	ef 90       	pop	r14
- 624:	df 90       	pop	r13
- 626:	cf 90       	pop	r12
- 628:	08 95       	ret
+ 66c:	ff 90       	pop	r15
+ 66e:	ef 90       	pop	r14
+ 670:	df 90       	pop	r13
+ 672:	cf 90       	pop	r12
+ 674:	08 95       	ret
 
-0000062a <main>:
+00000676 <main>:
 int main(void)
 {	
 	// Startup sequence
 	
 	// Init counters:
 	DDRE |= (1 << LOAD); // Setting LOAD to output;
- 62a:	8d b1       	in	r24, 0x0d	; 13
- 62c:	88 60       	ori	r24, 0x08	; 8
- 62e:	8d b9       	out	0x0d, r24	; 13
+ 676:	8d b1       	in	r24, 0x0d	; 13
+ 678:	88 60       	ori	r24, 0x08	; 8
+ 67a:	8d b9       	out	0x0d, r24	; 13
 	LOAD_HIGH; // Setting LOAD to high (disabled)
- 630:	8e b1       	in	r24, 0x0e	; 14
- 632:	88 60       	ori	r24, 0x08	; 8
- 634:	8e b9       	out	0x0e, r24	; 14
+ 67c:	8e b1       	in	r24, 0x0e	; 14
+ 67e:	88 60       	ori	r24, 0x08	; 8
+ 680:	8e b9       	out	0x0e, r24	; 14
 	
 	DDRB |= (1 << PB7); // Setting BLT_EN to output;
- 636:	84 b1       	in	r24, 0x04	; 4
- 638:	80 68       	ori	r24, 0x80	; 128
- 63a:	84 b9       	out	0x04, r24	; 4
+ 682:	84 b1       	in	r24, 0x04	; 4
+ 684:	80 68       	ori	r24, 0x80	; 128
+ 686:	84 b9       	out	0x04, r24	; 4
 	BLT_EN_LOW; // Setting BLT_EN to low.
- 63c:	85 b1       	in	r24, 0x05	; 5
- 63e:	8f 77       	andi	r24, 0x7F	; 127
- 640:	85 b9       	out	0x05, r24	; 5
+ 688:	85 b1       	in	r24, 0x05	; 5
+ 68a:	8f 77       	andi	r24, 0x7F	; 127
+ 68c:	85 b9       	out	0x05, r24	; 5
 	
 	// Init IO and LCD:
 	// Setting CS, DC, RD, WR to output.
 	DDRB |= (1 << CS);
- 642:	84 b1       	in	r24, 0x04	; 4
- 644:	80 64       	ori	r24, 0x40	; 64
- 646:	84 b9       	out	0x04, r24	; 4
+ 68e:	84 b1       	in	r24, 0x04	; 4
+ 690:	80 64       	ori	r24, 0x40	; 64
+ 692:	84 b9       	out	0x04, r24	; 4
 	DDRB |= (1 << BL_PWM);
- 648:	84 b1       	in	r24, 0x04	; 4
- 64a:	80 62       	ori	r24, 0x20	; 32
- 64c:	84 b9       	out	0x04, r24	; 4
+ 694:	84 b1       	in	r24, 0x04	; 4
+ 696:	80 62       	ori	r24, 0x20	; 32
+ 698:	84 b9       	out	0x04, r24	; 4
 	DDRB |= (1 << WR_BLT_CLK);
- 64e:	84 b1       	in	r24, 0x04	; 4
- 650:	80 61       	ori	r24, 0x10	; 16
- 652:	84 b9       	out	0x04, r24	; 4
+ 69a:	84 b1       	in	r24, 0x04	; 4
+ 69c:	80 61       	ori	r24, 0x10	; 16
+ 69e:	84 b9       	out	0x04, r24	; 4
 	DDRE |= (1 << RD);
- 654:	8d b1       	in	r24, 0x0d	; 13
- 656:	80 64       	ori	r24, 0x40	; 64
- 658:	8d b9       	out	0x0d, r24	; 13
+ 6a0:	8d b1       	in	r24, 0x0d	; 13
+ 6a2:	80 64       	ori	r24, 0x40	; 64
+ 6a4:	8d b9       	out	0x0d, r24	; 13
 	DDRE |= (1 << DC);
- 65a:	8d b1       	in	r24, 0x0d	; 13
- 65c:	80 68       	ori	r24, 0x80	; 128
- 65e:	8d b9       	out	0x0d, r24	; 13
+ 6a6:	8d b1       	in	r24, 0x0d	; 13
+ 6a8:	80 68       	ori	r24, 0x80	; 128
+ 6aa:	8d b9       	out	0x0d, r24	; 13
 	// All are set to High (disabled). DC doesn't matter.
 	PORTB |= (1 << CS);
- 660:	85 b1       	in	r24, 0x05	; 5
- 662:	80 64       	ori	r24, 0x40	; 64
- 664:	85 b9       	out	0x05, r24	; 5
+ 6ac:	85 b1       	in	r24, 0x05	; 5
+ 6ae:	80 64       	ori	r24, 0x40	; 64
+ 6b0:	85 b9       	out	0x05, r24	; 5
 	//PORTB |= (1 << BL_PWM); // Not enabled rn as it turns off display. Fix this later.
 	PORTB |= (1 << WR_BLT_CLK);
- 666:	85 b1       	in	r24, 0x05	; 5
- 668:	80 61       	ori	r24, 0x10	; 16
- 66a:	85 b9       	out	0x05, r24	; 5
+ 6b2:	85 b1       	in	r24, 0x05	; 5
+ 6b4:	80 61       	ori	r24, 0x10	; 16
+ 6b6:	85 b9       	out	0x05, r24	; 5
 	PORTE |= (1 << RD);
- 66c:	8e b1       	in	r24, 0x0e	; 14
- 66e:	80 64       	ori	r24, 0x40	; 64
- 670:	8e b9       	out	0x0e, r24	; 14
+ 6b8:	8e b1       	in	r24, 0x0e	; 14
+ 6ba:	80 64       	ori	r24, 0x40	; 64
+ 6bc:	8e b9       	out	0x0e, r24	; 14
 	PORTE |= (1 << DC);
- 672:	8e b1       	in	r24, 0x0e	; 14
- 674:	80 68       	ori	r24, 0x80	; 128
- 676:	8e b9       	out	0x0e, r24	; 14
+ 6be:	8e b1       	in	r24, 0x0e	; 14
+ 6c0:	80 68       	ori	r24, 0x80	; 128
+ 6c2:	8e b9       	out	0x0e, r24	; 14
 	// Set IO to output
 	DDRA = 0xFF; // D0 - D7
- 678:	8f ef       	ldi	r24, 0xFF	; 255
- 67a:	81 b9       	out	0x01, r24	; 1
+ 6c4:	8f ef       	ldi	r24, 0xFF	; 255
+ 6c6:	81 b9       	out	0x01, r24	; 1
 	DDRC = 0xFF; // D8 - D15
- 67c:	87 b9       	out	0x07, r24	; 7
+ 6c8:	87 b9       	out	0x07, r24	; 7
 	
     initUART(); // initialize the UART
- 67e:	0e 94 c5 03 	call	0x78a	; 0x78a <initUART>
+ 6ca:	0e 94 eb 03 	call	0x7d6	; 0x7d6 <initUART>
 	initHY32D(); // initialize HY32D screen
- 682:	0e 94 34 01 	call	0x268	; 0x268 <initHY32D>
+ 6ce:	0e 94 34 01 	call	0x268	; 0x268 <initHY32D>
 	sei(); //Enable global interrupt
- 686:	78 94       	sei
+ 6d2:	78 94       	sei
 	systemCheck();
- 688:	0e 94 f5 03 	call	0x7ea	; 0x7ea <systemCheck>
+ 6d4:	0e 94 1b 04 	call	0x836	; 0x836 <systemCheck>
 	startupMessage();
- 68c:	0e 94 28 04 	call	0x850	; 0x850 <startupMessage>
- 690:	ff cf       	rjmp	.-2      	; 0x690 <main+0x66>
+ 6d8:	0e 94 4e 04 	call	0x89c	; 0x89c <startupMessage>
+ 6dc:	ff cf       	rjmp	.-2      	; 0x6dc <main+0x66>
 
-00000692 <__vector_13>:
+000006de <__vector_13>:
 		- INFO:Utviklingen vil skje på egen maskinvareplattform.
 		*/
     }
 }
 
 ISR(USART0_RX_vect){
- 692:	1f 92       	push	r1
- 694:	0f 92       	push	r0
- 696:	0f b6       	in	r0, 0x3f	; 63
- 698:	0f 92       	push	r0
- 69a:	11 24       	eor	r1, r1
- 69c:	2f 93       	push	r18
- 69e:	3f 93       	push	r19
- 6a0:	4f 93       	push	r20
- 6a2:	5f 93       	push	r21
- 6a4:	6f 93       	push	r22
- 6a6:	7f 93       	push	r23
- 6a8:	8f 93       	push	r24
- 6aa:	9f 93       	push	r25
- 6ac:	af 93       	push	r26
- 6ae:	bf 93       	push	r27
- 6b0:	cf 93       	push	r28
- 6b2:	ef 93       	push	r30
- 6b4:	ff 93       	push	r31
+ 6de:	1f 92       	push	r1
+ 6e0:	0f 92       	push	r0
+ 6e2:	0f b6       	in	r0, 0x3f	; 63
+ 6e4:	0f 92       	push	r0
+ 6e6:	11 24       	eor	r1, r1
+ 6e8:	2f 93       	push	r18
+ 6ea:	3f 93       	push	r19
+ 6ec:	4f 93       	push	r20
+ 6ee:	5f 93       	push	r21
+ 6f0:	6f 93       	push	r22
+ 6f2:	7f 93       	push	r23
+ 6f4:	8f 93       	push	r24
+ 6f6:	9f 93       	push	r25
+ 6f8:	af 93       	push	r26
+ 6fa:	bf 93       	push	r27
+ 6fc:	cf 93       	push	r28
+ 6fe:	ef 93       	push	r30
+ 700:	ff 93       	push	r31
 	// Read received data to variable. This also clears the interrupt flag. If data isn't read a new interrupt will immediately happen. See 19.7.3 datasheet.
 	// When the receive complete interrupt enable (RXCIEn) in UCSRnB is set, the USART receive complete interrupt will be executed as long as the RXCn flag is set.
 	uint8_t receivedByte = UARTBuffer; // local temporary variable for received byte
- 6b6:	c0 91 c6 00 	lds	r28, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7fc0c6>
+ 702:	c0 91 c6 00 	lds	r28, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7fc0c6>
 	if (receivedByte){
- 6ba:	cc 23       	and	r28, r28
- 6bc:	39 f1       	breq	.+78     	; 0x70c <__vector_13+0x7a>
+ 706:	cc 23       	and	r28, r28
+ 708:	39 f1       	breq	.+78     	; 0x758 <__vector_13+0x7a>
 		if (receivedByte == 45) { // that's the '-' sign.
- 6be:	cd 32       	cpi	r28, 0x2D	; 45
- 6c0:	31 f4       	brne	.+12     	; 0x6ce <__vector_13+0x3c>
+ 70a:	cd 32       	cpi	r28, 0x2D	; 45
+ 70c:	31 f4       	brne	.+12     	; 0x71a <__vector_13+0x3c>
 			remoteEcho = ~remoteEcho;
- 6c2:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
- 6c6:	80 95       	com	r24
- 6c8:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
- 6cc:	1f c0       	rjmp	.+62     	; 0x70c <__vector_13+0x7a>
+ 70e:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 712:	80 95       	com	r24
+ 714:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 718:	1f c0       	rjmp	.+62     	; 0x758 <__vector_13+0x7a>
 		}else if(receivedByte == 's'){
- 6ce:	c3 37       	cpi	r28, 0x73	; 115
- 6d0:	19 f4       	brne	.+6      	; 0x6d8 <__vector_13+0x46>
+ 71a:	c3 37       	cpi	r28, 0x73	; 115
+ 71c:	19 f4       	brne	.+6      	; 0x724 <__vector_13+0x46>
 			systemCheck();
- 6d2:	0e 94 f5 03 	call	0x7ea	; 0x7ea <systemCheck>
- 6d6:	1a c0       	rjmp	.+52     	; 0x70c <__vector_13+0x7a>
+ 71e:	0e 94 1b 04 	call	0x836	; 0x836 <systemCheck>
+ 722:	1a c0       	rjmp	.+52     	; 0x758 <__vector_13+0x7a>
 		}else if(receivedByte == 'l'){
- 6d8:	cc 36       	cpi	r28, 0x6C	; 108
- 6da:	19 f4       	brne	.+6      	; 0x6e2 <__vector_13+0x50>
+ 724:	cc 36       	cpi	r28, 0x6C	; 108
+ 726:	19 f4       	brne	.+6      	; 0x72e <__vector_13+0x50>
 			lcdStatusRead();
- 6dc:	0e 94 d8 01 	call	0x3b0	; 0x3b0 <lcdStatusRead>
- 6e0:	15 c0       	rjmp	.+42     	; 0x70c <__vector_13+0x7a>
+ 728:	0e 94 d8 01 	call	0x3b0	; 0x3b0 <lcdStatusRead>
+ 72c:	15 c0       	rjmp	.+42     	; 0x758 <__vector_13+0x7a>
 		}else if(receivedByte == 'b'){
- 6e2:	c2 36       	cpi	r28, 0x62	; 98
- 6e4:	29 f4       	brne	.+10     	; 0x6f0 <__vector_13+0x5e>
+ 72e:	c2 36       	cpi	r28, 0x62	; 98
+ 730:	29 f4       	brne	.+10     	; 0x73c <__vector_13+0x5e>
 			fillScreen(Blue);
- 6e6:	80 e0       	ldi	r24, 0x00	; 0
- 6e8:	98 ef       	ldi	r25, 0xF8	; 248
- 6ea:	0e 94 82 00 	call	0x104	; 0x104 <fillScreen>
- 6ee:	0e c0       	rjmp	.+28     	; 0x70c <__vector_13+0x7a>
+ 732:	80 e0       	ldi	r24, 0x00	; 0
+ 734:	98 ef       	ldi	r25, 0xF8	; 248
+ 736:	0e 94 82 00 	call	0x104	; 0x104 <fillScreen>
+ 73a:	0e c0       	rjmp	.+28     	; 0x758 <__vector_13+0x7a>
 		}else if(receivedByte == 'w'){
- 6f0:	c7 37       	cpi	r28, 0x77	; 119
- 6f2:	19 f4       	brne	.+6      	; 0x6fa <__vector_13+0x68>
+ 73c:	c7 37       	cpi	r28, 0x77	; 119
+ 73e:	19 f4       	brne	.+6      	; 0x746 <__vector_13+0x68>
 			writeSRAM();
- 6f4:	0e 94 af 02 	call	0x55e	; 0x55e <writeSRAM>
- 6f8:	09 c0       	rjmp	.+18     	; 0x70c <__vector_13+0x7a>
+ 740:	0e 94 d8 02 	call	0x5b0	; 0x5b0 <writeSRAM>
+ 744:	09 c0       	rjmp	.+18     	; 0x758 <__vector_13+0x7a>
 		}else if(receivedByte == 'r'){
- 6fa:	c2 37       	cpi	r28, 0x72	; 114
- 6fc:	19 f4       	brne	.+6      	; 0x704 <__vector_13+0x72>
+ 746:	c2 37       	cpi	r28, 0x72	; 114
+ 748:	19 f4       	brne	.+6      	; 0x750 <__vector_13+0x72>
 			readSRAM();
- 6fe:	0e 94 9a 02 	call	0x534	; 0x534 <readSRAM>
- 702:	04 c0       	rjmp	.+8      	; 0x70c <__vector_13+0x7a>
+ 74a:	0e 94 a1 02 	call	0x542	; 0x542 <readSRAM>
+ 74e:	04 c0       	rjmp	.+8      	; 0x758 <__vector_13+0x7a>
 		}else if(receivedByte == 'T'){
- 704:	c4 35       	cpi	r28, 0x54	; 84
- 706:	11 f4       	brne	.+4      	; 0x70c <__vector_13+0x7a>
+ 750:	c4 35       	cpi	r28, 0x54	; 84
+ 752:	11 f4       	brne	.+4      	; 0x758 <__vector_13+0x7a>
 			screenTest();
- 708:	0e 94 8b 01 	call	0x316	; 0x316 <screenTest>
+ 754:	0e 94 8b 01 	call	0x316	; 0x316 <screenTest>
 		}
 	// If echo is on, and the ASCII character is higher than 31, or Bell, Carriage Return, Line Feed or backspace, then echo the character. Other are filtered as to not get strange behavior from Putty.
 	}
 	if (remoteEcho && ((receivedByte > 31) || (receivedByte == Bell) || (receivedByte == CR) || (receivedByte == LF) || (receivedByte == backspace))){
- 70c:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
- 710:	88 23       	and	r24, r24
- 712:	69 f0       	breq	.+26     	; 0x72e <__vector_13+0x9c>
- 714:	c0 32       	cpi	r28, 0x20	; 32
- 716:	40 f4       	brcc	.+16     	; 0x728 <__vector_13+0x96>
- 718:	c7 30       	cpi	r28, 0x07	; 7
- 71a:	31 f0       	breq	.+12     	; 0x728 <__vector_13+0x96>
- 71c:	cd 30       	cpi	r28, 0x0D	; 13
- 71e:	21 f0       	breq	.+8      	; 0x728 <__vector_13+0x96>
- 720:	ca 30       	cpi	r28, 0x0A	; 10
- 722:	11 f0       	breq	.+4      	; 0x728 <__vector_13+0x96>
- 724:	c8 30       	cpi	r28, 0x08	; 8
- 726:	19 f4       	brne	.+6      	; 0x72e <__vector_13+0x9c>
+ 758:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 75c:	88 23       	and	r24, r24
+ 75e:	69 f0       	breq	.+26     	; 0x77a <__vector_13+0x9c>
+ 760:	c0 32       	cpi	r28, 0x20	; 32
+ 762:	40 f4       	brcc	.+16     	; 0x774 <__vector_13+0x96>
+ 764:	c7 30       	cpi	r28, 0x07	; 7
+ 766:	31 f0       	breq	.+12     	; 0x774 <__vector_13+0x96>
+ 768:	cd 30       	cpi	r28, 0x0D	; 13
+ 76a:	21 f0       	breq	.+8      	; 0x774 <__vector_13+0x96>
+ 76c:	ca 30       	cpi	r28, 0x0A	; 10
+ 76e:	11 f0       	breq	.+4      	; 0x774 <__vector_13+0x96>
+ 770:	c8 30       	cpi	r28, 0x08	; 8
+ 772:	19 f4       	brne	.+6      	; 0x77a <__vector_13+0x9c>
 		transmitUART(receivedByte);
- 728:	8c 2f       	mov	r24, r28
- 72a:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 774:	8c 2f       	mov	r24, r28
+ 776:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	}
- 72e:	ff 91       	pop	r31
- 730:	ef 91       	pop	r30
- 732:	cf 91       	pop	r28
- 734:	bf 91       	pop	r27
- 736:	af 91       	pop	r26
- 738:	9f 91       	pop	r25
- 73a:	8f 91       	pop	r24
- 73c:	7f 91       	pop	r23
- 73e:	6f 91       	pop	r22
- 740:	5f 91       	pop	r21
- 742:	4f 91       	pop	r20
- 744:	3f 91       	pop	r19
- 746:	2f 91       	pop	r18
- 748:	0f 90       	pop	r0
- 74a:	0f be       	out	0x3f, r0	; 63
- 74c:	0f 90       	pop	r0
- 74e:	1f 90       	pop	r1
- 750:	18 95       	reti
+ 77a:	ff 91       	pop	r31
+ 77c:	ef 91       	pop	r30
+ 77e:	cf 91       	pop	r28
+ 780:	bf 91       	pop	r27
+ 782:	af 91       	pop	r26
+ 784:	9f 91       	pop	r25
+ 786:	8f 91       	pop	r24
+ 788:	7f 91       	pop	r23
+ 78a:	6f 91       	pop	r22
+ 78c:	5f 91       	pop	r21
+ 78e:	4f 91       	pop	r20
+ 790:	3f 91       	pop	r19
+ 792:	2f 91       	pop	r18
+ 794:	0f 90       	pop	r0
+ 796:	0f be       	out	0x3f, r0	; 63
+ 798:	0f 90       	pop	r0
+ 79a:	1f 90       	pop	r1
+ 79c:	18 95       	reti
 
-00000752 <toHex>:
+0000079e <toHex>:
  */ 
 
 #include "stdint.h"
 
 uint8_t toHex(uint8_t number) {
 	uint8_t num = '0'+number;
- 752:	80 5d       	subi	r24, 0xD0	; 208
+ 79e:	80 5d       	subi	r24, 0xD0	; 208
 	if(num < 58){
- 754:	8a 33       	cpi	r24, 0x3A	; 58
- 756:	c0 f0       	brcs	.+48     	; 0x788 <toHex+0x36>
+ 7a0:	8a 33       	cpi	r24, 0x3A	; 58
+ 7a2:	c0 f0       	brcs	.+48     	; 0x7d4 <toHex+0x36>
 		return num;
 	}
 	else if(num == 58){
- 758:	8a 33       	cpi	r24, 0x3A	; 58
- 75a:	59 f0       	breq	.+22     	; 0x772 <toHex+0x20>
+ 7a4:	8a 33       	cpi	r24, 0x3A	; 58
+ 7a6:	59 f0       	breq	.+22     	; 0x7be <toHex+0x20>
 		return 'A';
 	}
 	else if(num == 59){
- 75c:	8b 33       	cpi	r24, 0x3B	; 59
- 75e:	59 f0       	breq	.+22     	; 0x776 <toHex+0x24>
+ 7a8:	8b 33       	cpi	r24, 0x3B	; 59
+ 7aa:	59 f0       	breq	.+22     	; 0x7c2 <toHex+0x24>
 		return 'B';
 	}
 	else if(num == 60){
- 760:	8c 33       	cpi	r24, 0x3C	; 60
- 762:	59 f0       	breq	.+22     	; 0x77a <toHex+0x28>
+ 7ac:	8c 33       	cpi	r24, 0x3C	; 60
+ 7ae:	59 f0       	breq	.+22     	; 0x7c6 <toHex+0x28>
 		return 'C';
 	}
 	else if(num == 61){
- 764:	8d 33       	cpi	r24, 0x3D	; 61
- 766:	59 f0       	breq	.+22     	; 0x77e <toHex+0x2c>
+ 7b0:	8d 33       	cpi	r24, 0x3D	; 61
+ 7b2:	59 f0       	breq	.+22     	; 0x7ca <toHex+0x2c>
 		return 'D';
 	}
 	else if(num == 62){
- 768:	8e 33       	cpi	r24, 0x3E	; 62
- 76a:	59 f0       	breq	.+22     	; 0x782 <toHex+0x30>
+ 7b4:	8e 33       	cpi	r24, 0x3E	; 62
+ 7b6:	59 f0       	breq	.+22     	; 0x7ce <toHex+0x30>
 		return 'E';
 	}
 	else if(num == 63){
- 76c:	8f 33       	cpi	r24, 0x3F	; 63
- 76e:	59 f0       	breq	.+22     	; 0x786 <toHex+0x34>
+ 7b8:	8f 33       	cpi	r24, 0x3F	; 63
+ 7ba:	59 f0       	breq	.+22     	; 0x7d2 <toHex+0x34>
 		return 'F';
 	}
- 770:	08 95       	ret
+ 7bc:	08 95       	ret
 	uint8_t num = '0'+number;
 	if(num < 58){
 		return num;
 	}
 	else if(num == 58){
 		return 'A';
- 772:	81 e4       	ldi	r24, 0x41	; 65
- 774:	08 95       	ret
+ 7be:	81 e4       	ldi	r24, 0x41	; 65
+ 7c0:	08 95       	ret
 	}
 	else if(num == 59){
 		return 'B';
- 776:	82 e4       	ldi	r24, 0x42	; 66
- 778:	08 95       	ret
+ 7c2:	82 e4       	ldi	r24, 0x42	; 66
+ 7c4:	08 95       	ret
 	}
 	else if(num == 60){
 		return 'C';
- 77a:	83 e4       	ldi	r24, 0x43	; 67
- 77c:	08 95       	ret
+ 7c6:	83 e4       	ldi	r24, 0x43	; 67
+ 7c8:	08 95       	ret
 	}
 	else if(num == 61){
 		return 'D';
- 77e:	84 e4       	ldi	r24, 0x44	; 68
- 780:	08 95       	ret
+ 7ca:	84 e4       	ldi	r24, 0x44	; 68
+ 7cc:	08 95       	ret
 	}
 	else if(num == 62){
 		return 'E';
- 782:	85 e4       	ldi	r24, 0x45	; 69
- 784:	08 95       	ret
+ 7ce:	85 e4       	ldi	r24, 0x45	; 69
+ 7d0:	08 95       	ret
 	}
 	else if(num == 63){
 		return 'F';
- 786:	86 e4       	ldi	r24, 0x46	; 70
+ 7d2:	86 e4       	ldi	r24, 0x46	; 70
 	}
- 788:	08 95       	ret
+ 7d4:	08 95       	ret
 
-0000078a <initUART>:
+000007d6 <initUART>:
 
 void initUART (void){
 	// calculating the baud rate clock division registers at compile time and setting the baud rate registers properly at run time.
 	const uint8_t baudRateReg_low = (uint8_t) ((( F_CPU / ( 16 * uart_bps )) - 1 ) & 0xFF);
 	const uint8_t baudRateReg_high = (uint8_t) ((( F_CPU / ( 16 * uart_bps )) - 1 ) >> 8);
 	UBRR0L = baudRateReg_low;
- 78a:	8f e2       	ldi	r24, 0x2F	; 47
- 78c:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7fc0c4>
+ 7d6:	8f e2       	ldi	r24, 0x2F	; 47
+ 7d8:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7fc0c4>
 	UBRR0H = baudRateReg_high;
- 790:	10 92 c5 00 	sts	0x00C5, r1	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7fc0c5>
+ 7dc:	10 92 c5 00 	sts	0x00C5, r1	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7fc0c5>
 	
 	// Alternative way of calculating the baud rate register, with casting
 	//	const uint8_t UBRR_reg_val = (uint8_t) ((sysClk / 16.0 * (float) uart_bps) - 1.0);
 
 	// Setting up the USART control registers. All bits are included for sake of overview. Compiler will optimize.
 	UCSR0A = 0x00 | (0 << RXC0) | (0 << TXC0) | (0 << UDRE0) | (0 << FE0) | (0 << DOR0) | (0 << UPE0) | (0 << U2X0) | (0 << MPCM0);  // NOT running 2x mode
- 794:	10 92 c0 00 	sts	0x00C0, r1	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7fc0c0>
+ 7e0:	10 92 c0 00 	sts	0x00C0, r1	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7fc0c0>
 	UCSR0B = 0x00 | (1 << RXCIE0) | (0 << TXCIE0) | (0 << UDRIE0) | (1 << RXEN0) | (1 << TXEN0) | (0 << UCSZ02);  // Enable Rx and Tx setting the ports mux correctly
- 798:	88 e9       	ldi	r24, 0x98	; 152
- 79a:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7fc0c1>
+ 7e4:	88 e9       	ldi	r24, 0x98	; 152
+ 7e6:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7fc0c1>
 	UCSR0C = 0x00 | (0 << UMSEL0) | (0 << UPM01) | (0 << UPM00) | (0 << USBS0) | (1 << UCSZ01) | (1 << UCSZ00); // Selecting 8-bit character for the USART
- 79e:	86 e0       	ldi	r24, 0x06	; 6
- 7a0:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7fc0c2>
- 7a4:	08 95       	ret
+ 7ea:	86 e0       	ldi	r24, 0x06	; 6
+ 7ec:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7fc0c2>
+ 7f0:	08 95       	ret
 
-000007a6 <puttyCompatibleCheck>:
+000007f2 <puttyCompatibleCheck>:
 }
 
 uint8_t puttyCompatibleCheck(uint8_t byte){
 	if((byte > 31) || (byte == Bell) || (byte == CR) || (byte == LF) || (byte == backspace)){
- 7a6:	80 32       	cpi	r24, 0x20	; 32
- 7a8:	48 f4       	brcc	.+18     	; 0x7bc <puttyCompatibleCheck+0x16>
- 7aa:	87 30       	cpi	r24, 0x07	; 7
- 7ac:	39 f0       	breq	.+14     	; 0x7bc <puttyCompatibleCheck+0x16>
- 7ae:	8d 30       	cpi	r24, 0x0D	; 13
- 7b0:	29 f0       	breq	.+10     	; 0x7bc <puttyCompatibleCheck+0x16>
- 7b2:	8a 30       	cpi	r24, 0x0A	; 10
- 7b4:	19 f0       	breq	.+6      	; 0x7bc <puttyCompatibleCheck+0x16>
- 7b6:	88 30       	cpi	r24, 0x08	; 8
- 7b8:	09 f0       	breq	.+2      	; 0x7bc <puttyCompatibleCheck+0x16>
+ 7f2:	80 32       	cpi	r24, 0x20	; 32
+ 7f4:	48 f4       	brcc	.+18     	; 0x808 <puttyCompatibleCheck+0x16>
+ 7f6:	87 30       	cpi	r24, 0x07	; 7
+ 7f8:	39 f0       	breq	.+14     	; 0x808 <puttyCompatibleCheck+0x16>
+ 7fa:	8d 30       	cpi	r24, 0x0D	; 13
+ 7fc:	29 f0       	breq	.+10     	; 0x808 <puttyCompatibleCheck+0x16>
+ 7fe:	8a 30       	cpi	r24, 0x0A	; 10
+ 800:	19 f0       	breq	.+6      	; 0x808 <puttyCompatibleCheck+0x16>
+ 802:	88 30       	cpi	r24, 0x08	; 8
+ 804:	09 f0       	breq	.+2      	; 0x808 <puttyCompatibleCheck+0x16>
 		return byte;
 		}else{
 		return (uint8_t)64;
- 7ba:	80 e4       	ldi	r24, 0x40	; 64
+ 806:	80 e4       	ldi	r24, 0x40	; 64
 	}
 }
- 7bc:	08 95       	ret
+ 808:	08 95       	ret
 
-000007be <transmitUART>:
+0000080a <transmitUART>:
 
 int transmitUART (char data){
 	short timeoutLimit = 1000; // after 1000 tries, just skip it and try next char. This is about 136 microseconds of time at 7.37 Mhz
 	short timeout = 0;
- 7be:	20 e0       	ldi	r18, 0x00	; 0
- 7c0:	30 e0       	ldi	r19, 0x00	; 0
+ 80a:	20 e0       	ldi	r18, 0x00	; 0
+ 80c:	30 e0       	ldi	r19, 0x00	; 0
 	while(1){
 		if(UCSR0A & (1 << UDRE0)){
- 7c2:	90 91 c0 00 	lds	r25, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7fc0c0>
- 7c6:	95 ff       	sbrs	r25, 5
- 7c8:	07 c0       	rjmp	.+14     	; 0x7d8 <transmitUART+0x1a>
+ 80e:	90 91 c0 00 	lds	r25, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7fc0c0>
+ 812:	95 ff       	sbrs	r25, 5
+ 814:	07 c0       	rjmp	.+14     	; 0x824 <transmitUART+0x1a>
 			UARTBuffer = puttyCompatibleCheck(data);
- 7ca:	0e 94 d3 03 	call	0x7a6	; 0x7a6 <puttyCompatibleCheck>
- 7ce:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7fc0c6>
+ 816:	0e 94 f9 03 	call	0x7f2	; 0x7f2 <puttyCompatibleCheck>
+ 81a:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7fc0c6>
 			return 1;
- 7d2:	81 e0       	ldi	r24, 0x01	; 1
- 7d4:	90 e0       	ldi	r25, 0x00	; 0
- 7d6:	08 95       	ret
+ 81e:	81 e0       	ldi	r24, 0x01	; 1
+ 820:	90 e0       	ldi	r25, 0x00	; 0
+ 822:	08 95       	ret
 			}else{
 			timeout++;
- 7d8:	2f 5f       	subi	r18, 0xFF	; 255
- 7da:	3f 4f       	sbci	r19, 0xFF	; 255
+ 824:	2f 5f       	subi	r18, 0xFF	; 255
+ 826:	3f 4f       	sbci	r19, 0xFF	; 255
 			if(timeout > timeoutLimit){
- 7dc:	29 3e       	cpi	r18, 0xE9	; 233
- 7de:	93 e0       	ldi	r25, 0x03	; 3
- 7e0:	39 07       	cpc	r19, r25
- 7e2:	7c f3       	brlt	.-34     	; 0x7c2 <transmitUART+0x4>
+ 828:	29 3e       	cpi	r18, 0xE9	; 233
+ 82a:	93 e0       	ldi	r25, 0x03	; 3
+ 82c:	39 07       	cpc	r19, r25
+ 82e:	7c f3       	brlt	.-34     	; 0x80e <transmitUART+0x4>
 				return 0;
- 7e4:	80 e0       	ldi	r24, 0x00	; 0
- 7e6:	90 e0       	ldi	r25, 0x00	; 0
+ 830:	80 e0       	ldi	r24, 0x00	; 0
+ 832:	90 e0       	ldi	r25, 0x00	; 0
 			}
 		}
 	}
 }
- 7e8:	08 95       	ret
+ 834:	08 95       	ret
 
-000007ea <systemCheck>:
+00000836 <systemCheck>:
 #include "UART.h"
 #include "HY32D.h"
 
 // Type S for system check:
 void systemCheck(void){
 	transmitUART(CR);
- 7ea:	8d e0       	ldi	r24, 0x0D	; 13
- 7ec:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 836:	8d e0       	ldi	r24, 0x0D	; 13
+ 838:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('-');
- 7f0:	8d e2       	ldi	r24, 0x2D	; 45
- 7f2:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 83c:	8d e2       	ldi	r24, 0x2D	; 45
+ 83e:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART(CR);
- 7f6:	8d e0       	ldi	r24, 0x0D	; 13
- 7f8:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 842:	8d e0       	ldi	r24, 0x0D	; 13
+ 844:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('S');	transmitUART('y'); 	transmitUART('s'); 	transmitUART('t'); 	transmitUART('e');
- 7fc:	83 e5       	ldi	r24, 0x53	; 83
- 7fe:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 802:	89 e7       	ldi	r24, 0x79	; 121
- 804:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 808:	83 e7       	ldi	r24, 0x73	; 115
- 80a:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 80e:	84 e7       	ldi	r24, 0x74	; 116
- 810:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 814:	85 e6       	ldi	r24, 0x65	; 101
- 816:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 848:	83 e5       	ldi	r24, 0x53	; 83
+ 84a:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 84e:	89 e7       	ldi	r24, 0x79	; 121
+ 850:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 854:	83 e7       	ldi	r24, 0x73	; 115
+ 856:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 85a:	84 e7       	ldi	r24, 0x74	; 116
+ 85c:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 860:	85 e6       	ldi	r24, 0x65	; 101
+ 862:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('m');	transmitUART(' '); 	transmitUART('c'); 	transmitUART('h'); 	transmitUART('e');
- 81a:	8d e6       	ldi	r24, 0x6D	; 109
- 81c:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 820:	80 e2       	ldi	r24, 0x20	; 32
- 822:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 826:	83 e6       	ldi	r24, 0x63	; 99
- 828:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 82c:	88 e6       	ldi	r24, 0x68	; 104
- 82e:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 832:	85 e6       	ldi	r24, 0x65	; 101
- 834:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 866:	8d e6       	ldi	r24, 0x6D	; 109
+ 868:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 86c:	80 e2       	ldi	r24, 0x20	; 32
+ 86e:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 872:	83 e6       	ldi	r24, 0x63	; 99
+ 874:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 878:	88 e6       	ldi	r24, 0x68	; 104
+ 87a:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 87e:	85 e6       	ldi	r24, 0x65	; 101
+ 880:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('c');	transmitUART('k'); 	transmitUART(':');
- 838:	83 e6       	ldi	r24, 0x63	; 99
- 83a:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 83e:	8b e6       	ldi	r24, 0x6B	; 107
- 840:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 844:	8a e3       	ldi	r24, 0x3A	; 58
- 846:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 884:	83 e6       	ldi	r24, 0x63	; 99
+ 886:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 88a:	8b e6       	ldi	r24, 0x6B	; 107
+ 88c:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 890:	8a e3       	ldi	r24, 0x3A	; 58
+ 892:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	lcdStatusRead();
- 84a:	0e 94 d8 01 	call	0x3b0	; 0x3b0 <lcdStatusRead>
- 84e:	08 95       	ret
+ 896:	0e 94 d8 01 	call	0x3b0	; 0x3b0 <lcdStatusRead>
+ 89a:	08 95       	ret
 
-00000850 <startupMessage>:
+0000089c <startupMessage>:
 	// Check and print results of various components on the blitter board:
 }
 
 void startupMessage(void){
 	transmitUART('B');	transmitUART('l'); 	transmitUART('i'); 	transmitUART('t'); 	transmitUART('t');
- 850:	82 e4       	ldi	r24, 0x42	; 66
- 852:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 856:	8c e6       	ldi	r24, 0x6C	; 108
- 858:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 85c:	89 e6       	ldi	r24, 0x69	; 105
- 85e:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 862:	84 e7       	ldi	r24, 0x74	; 116
- 864:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 868:	84 e7       	ldi	r24, 0x74	; 116
- 86a:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 89c:	82 e4       	ldi	r24, 0x42	; 66
+ 89e:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8a2:	8c e6       	ldi	r24, 0x6C	; 108
+ 8a4:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8a8:	89 e6       	ldi	r24, 0x69	; 105
+ 8aa:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8ae:	84 e7       	ldi	r24, 0x74	; 116
+ 8b0:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8b4:	84 e7       	ldi	r24, 0x74	; 116
+ 8b6:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('e');	transmitUART('r'); 	transmitUART(' '); 	transmitUART('r'); 	transmitUART('e');
- 86e:	85 e6       	ldi	r24, 0x65	; 101
- 870:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 874:	82 e7       	ldi	r24, 0x72	; 114
- 876:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 87a:	80 e2       	ldi	r24, 0x20	; 32
- 87c:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 880:	82 e7       	ldi	r24, 0x72	; 114
- 882:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 886:	85 e6       	ldi	r24, 0x65	; 101
- 888:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 8ba:	85 e6       	ldi	r24, 0x65	; 101
+ 8bc:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8c0:	82 e7       	ldi	r24, 0x72	; 114
+ 8c2:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8c6:	80 e2       	ldi	r24, 0x20	; 32
+ 8c8:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8cc:	82 e7       	ldi	r24, 0x72	; 114
+ 8ce:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8d2:	85 e6       	ldi	r24, 0x65	; 101
+ 8d4:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART('a');	transmitUART('d'); 	transmitUART('y');
- 88c:	81 e6       	ldi	r24, 0x61	; 97
- 88e:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 892:	84 e6       	ldi	r24, 0x64	; 100
- 894:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 898:	89 e7       	ldi	r24, 0x79	; 121
- 89a:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
+ 8d8:	81 e6       	ldi	r24, 0x61	; 97
+ 8da:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8de:	84 e6       	ldi	r24, 0x64	; 100
+ 8e0:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8e4:	89 e7       	ldi	r24, 0x79	; 121
+ 8e6:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
 	transmitUART(CR);
- 89e:	8d e0       	ldi	r24, 0x0D	; 13
- 8a0:	0e 94 df 03 	call	0x7be	; 0x7be <transmitUART>
- 8a4:	08 95       	ret
+ 8ea:	8d e0       	ldi	r24, 0x0D	; 13
+ 8ec:	0e 94 05 04 	call	0x80a	; 0x80a <transmitUART>
+ 8f0:	08 95       	ret
 
-000008a6 <_exit>:
- 8a6:	f8 94       	cli
+000008f2 <_exit>:
+ 8f2:	f8 94       	cli
 
-000008a8 <__stop_program>:
- 8a8:	ff cf       	rjmp	.-2      	; 0x8a8 <__stop_program>
+000008f4 <__stop_program>:
+ 8f4:	ff cf       	rjmp	.-2      	; 0x8f4 <__stop_program>
