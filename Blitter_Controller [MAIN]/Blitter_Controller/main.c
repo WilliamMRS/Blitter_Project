@@ -11,19 +11,18 @@
 
 #define F_CPU 7372800UL
 #include "stdint.h"
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include "UART.h"
 #include "HY32D.h"
 #include "UARTCommands.h"
-#include "misc.h"
+#include "makroer.h"
 #include "SRAM.h"
 
 // Global variables
 uint8_t remoteEcho = 0;
-//unsigned char lData; // not redeclaring these variables increases performance a lot
-//unsigned char hData;
 
 void initTimers(){
 	// CS02,01,00 controls prescaling. Set CS00 to 1, so it's direct clocked (fastest possible).
@@ -76,58 +75,24 @@ int main(void)
 	
     while (1) 
     {
-		/*TODO:
 		
-		System control:
-		sjekk skjerm (forcibly les av SR)
-		sjekk SRAM   (skriv til SRAM, les av verdien, hvis det er samme som ble skrevet (på samme adresse) we good.
-		sjekk UART	(gjøres allerede)
-		sjekk tellere (sett de til en startverdi, sett IO til input og les av)
-		
-		Use timers (using software to increase max value) to blit via PB4 and PE4. (uhhhh)
-			
-		Today:
-			LCD:
-				Set coordinate before drawing (set memory addresses) (to 0,0 at start)
-				Function for drawing lines
-				Function for displaying text
-			UART:
-				Circular FIFO buffer that can take commands like fillScreen -red.
-				Be able to send commands with information like x, y coordinates, color etc.
-			UART Control:
-				Draw line via UART command line: (command, color, start x, start y, end x, end y)
-				Write text coming via UART to specific coordinates on screen: (command, start x, start y, color, data)
-				
-			Brukt USART til å kjøre kommandoer
-				
-			// kan lage funksjon som gjør at skjermen ikke hopper addresse når den har tegnet.
-		
-		- MÅ:  Bruke en ATmega169A sammen med ekstern SRAM og 5 stk 74-logikk tellere for 
-			   å aksellerere grafikk på en 320x240 RGB LCD-skjerm.
-		- MÅ:  UART for kommunikasjon til omverden. Grafikk-kommandoer og data kommer over UART.
-		- MÅ:  Definere kommandoer over UART for å tegne grafikk og tekst.
-		- BØR: System-kontroll ved start.
-		- BØR: Lagring av grafikk i FLASH.
-		
-		- KAN: Lage et scriptingspråk med makroer som kan lagres i ekstern FLASH for enerering av grafikk.
-		- KAN: Presse ytelsen i systemet.
-		- KAN: Krever kanskje utvidet bruk av pekere som funksjonspekere
-		- KAN: Krever kanskje innslag av assembly i høynivåkode. Selvstudium.
-		- INFO:Utviklingen vil skje på egen maskinvareplattform. */
     }
 }
 
+/*
+	Interrupt kjører 1 gang hver 256. opptelling, som inkrementerer memCounter og sjekker om den er over memTarget
+	og skal stoppe blittingen.
+	Kan endre på target slik (memTarget %(modulus) TIMER0_COMP_Target) = 0. Da får vi ingen overshoot.
+*/
 ISR(TIMER0_COMP_vect){
 	//transmitUART('w');
 	//wrSignal();
 	//rdSignalSRAM();
 	/*
-	memCounter++;
+	memCounter += 256;
+	// Ending of readSRAM function
 	if(memCounter >= memTarget){
-		TCCR0A = 0x00;
-		TCCR2A = 0x00;
-		transmit8BitAsHex((memCounter & 0xFF));
-		transmit8BitAsHex((memCounter >> 8) & 0xFF);
+		disable_counter_PB4;
 		CS_HIGH; // deselect LCD and SRAM
 		BLT_EN_LOW; // counters disabled
 		SRAMOutputDisable(); // disable SRAM OE, WE
@@ -135,7 +100,9 @@ ISR(TIMER0_COMP_vect){
 	}*/
 }
 
+
 ISR(USART0_RX_vect){
+	// UART avbrudd inspirert av Ingulf sin eksempelkode fra Øving 3.
 	// Read received data to variable. This also clears the interrupt flag. If data isn't read a new interrupt will immediately happen. See 19.7.3 datasheet.
 	// When the receive complete interrupt enable (RXCIEn) in UCSRnB is set, the USART receive complete interrupt will be executed as long as the RXCn flag is set.
 	uint8_t receivedByte = UARTBuffer; // local temporary variable for received byte

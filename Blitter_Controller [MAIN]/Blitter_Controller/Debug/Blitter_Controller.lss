@@ -600,7 +600,7 @@ void lcdStatusRead(void){ // reads SR register
  4a6:	08 95       	ret
 
 000004a8 <initTimers>:
-//unsigned char hData;
+uint8_t remoteEcho = 0;
 
 void initTimers(){
 	// CS02,01,00 controls prescaling. Set CS00 to 1, so it's direct clocked (fastest possible).
@@ -734,11 +734,11 @@ int main(void)
  55c:	ff cf       	rjmp	.-2      	; 0x55c <__stack+0x5d>
 
 0000055e <__vector_10>:
-		- KAN: Krever kanskje innslag av assembly i høynivåkode. Selvstudium.
-		- INFO:Utviklingen vil skje på egen maskinvareplattform. */
-    }
-}
-
+/*
+	Interrupt kjører 1 gang hver 256. opptelling, som inkrementerer memCounter og sjekker om den er over memTarget
+	og skal stoppe blittingen.
+	Kan endre på target slik (memTarget %(modulus) TIMER0_COMP_Target) = 0. Da får vi ingen overshoot.
+*/
 ISR(TIMER0_COMP_vect){
  55e:	1f 92       	push	r1
  560:	0f 92       	push	r0
@@ -758,6 +758,7 @@ ISR(TIMER0_COMP_vect){
  570:	18 95       	reti
 
 00000572 <__vector_13>:
+
 
 ISR(USART0_RX_vect){
  572:	1f 92       	push	r1
@@ -780,6 +781,7 @@ ISR(USART0_RX_vect){
  594:	cf 93       	push	r28
  596:	ef 93       	push	r30
  598:	ff 93       	push	r31
+	// UART avbrudd inspirert av Ingulf sin eksempelkode fra Øving 3.
 	// Read received data to variable. This also clears the interrupt flag. If data isn't read a new interrupt will immediately happen. See 19.7.3 datasheet.
 	// When the receive complete interrupt enable (RXCIEn) in UCSRnB is set, the USART receive complete interrupt will be executed as long as the RXCn flag is set.
 	uint8_t receivedByte = UARTBuffer; // local temporary variable for received byte
@@ -1111,6 +1113,7 @@ void readSRAM(uint32_t memStart){
 	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
  7a2:	0e 94 81 00 	call	0x102	; 0x102 <setIOtoInput>
 	
+	// using this for loop if not using blitting with the integrated counters.
 	for(unsigned long int i = 0; i < (pixels); i++){
  7a6:	c1 2c       	mov	r12, r1
  7a8:	d1 2c       	mov	r13, r1
@@ -1121,11 +1124,11 @@ void readSRAM(uint32_t memStart){
 		// PE4 flip fast as f
 		wrSignal(); // counters increment by one and screen updates. BLT_EN and WR
  7b2:	0e 94 4d 00 	call	0x9a	; 0x9a <wrSignal>
-	
 	writeIndex(0x22); // ensure writing to screenbuffer
 	DC_HIGH; // So it can write to screen!
 	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
 	
+	// using this for loop if not using blitting with the integrated counters.
 	for(unsigned long int i = 0; i < (pixels); i++){
  7b6:	8f ef       	ldi	r24, 0xFF	; 255
  7b8:	c8 1a       	sub	r12, r24
@@ -1139,11 +1142,11 @@ void readSRAM(uint32_t memStart){
  7c8:	e8 06       	cpc	r14, r24
  7ca:	f1 04       	cpc	r15, r1
  7cc:	80 f3       	brcs	.-32     	; 0x7ae <readSRAM+0x4a>
-	CS_HIGH; // deselect LCD and SRAM
-	BLT_EN_LOW; // counters disabled
-	SRAMOutputDisable(); // disable SRAM OE, WE
-	setIOtoOutput();
-	*/
+	//memTarget = (memStart + pixels);
+	//memCounter = memStart;
+	//TCCR0A = 0x00 | (0 << FOC0A) | (0 << WGM00) | (0 << COM0A1) | (1 << COM0A0) | (0 << WGM01) | (0 << CS02) | (0 << CS01) | (1 << CS00);
+
+	// Interrupt in main.c takes over
 }
  7ce:	ff 90       	pop	r15
  7d0:	ef 90       	pop	r14

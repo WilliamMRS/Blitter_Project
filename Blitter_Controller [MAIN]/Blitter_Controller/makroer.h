@@ -6,8 +6,8 @@
  */ 
 
 
-#ifndef MISC_H_
-#define MISC_H_
+#ifndef makroer_h_
+#define makroer_h_
 
 #ifndef F_CPU
 #define F_CPU 7372800UL

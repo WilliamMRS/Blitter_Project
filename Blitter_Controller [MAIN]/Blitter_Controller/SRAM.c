@@ -6,7 +6,7 @@
  */ 
 
 #include <avr/io.h>
-#include "misc.h"
+#include "makroer.h"
 #include <util/delay.h>
 #include "HY32D.h"
 #include "UART.h"
@@ -19,12 +19,11 @@ uint8_t continueReadFunction = 1;
 // writes it to the address given by the counters.
 void wrSignalSRAM(void){
 	SRAM_WE_LOW;
-	_delay_us(1); // TODO: needed?
+	_delay_us(1); //needed?
 	SRAM_WE_HIGH;
 }
 
-// Sends read signal to SRAM.
-// SRAM sends data to D0-D15.
+// Sends read signal to SRAM, thus SRAM sends data to D0-D15
 void rdSignalSRAM(void){
 	SRAM_OE_LOW;
 	SRAM_OE_HIGH;
@@ -35,9 +34,6 @@ void SRAMOutputDisable(void){
 	SRAM_WE_HIGH; // PORTE 5
 }
 
-/*
-	BLT_RST (to reset counter values is also an option. See counter datasheet.
-*/
 void setCountersToZero(void){
 	CS_HIGH; // Deselect LCD and SRAM
 	SRAMOutputDisable(); // Disable SRAM
@@ -94,6 +90,7 @@ void readSRAM(uint32_t memStart){
 	DC_HIGH; // So it can write to screen!
 	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
 	
+	// using this for loop if not using blitting with the integrated counters.
 	for(unsigned long int i = 0; i < (pixels); i++){
 		rdSignalSRAM(); // SRAM OE goes LOW-HIGH reading the SRAM values on the address specified by the counters to the screen.
 		// PE4 flip fast as f
@@ -101,31 +98,14 @@ void readSRAM(uint32_t memStart){
 		// PB4 flip fast as f
 	}
 	
+	/*
+		use modulus division to set counter target to a number that eventually hits memTarget with 0 carry.
+	*/
 	//memTarget = (memStart + pixels);
 	//memCounter = memStart;
 	//TCCR0A = 0x00 | (0 << FOC0A) | (0 << WGM00) | (0 << COM0A1) | (1 << COM0A0) | (0 << WGM01) | (0 << CS02) | (0 << CS01) | (1 << CS00);
-	//disable_counter_PB4;
-	
-	/*
-	memTarget = (uint16_t) (memStart + pixels);
-	memCounter = memStart;
-	continueReadFunction = 1;
-		transmitUART('@');
-		rdSignalSRAM();
-	enable_counter_PB4;
-	_delay_ms(10);
-		transmitUART('@');
-	while(continueReadFunction){
-		// do nothing, let interrupts do the job
-	}
-	transmitUART('@');
-	*/
-/*
-	CS_HIGH; // deselect LCD and SRAM
-	BLT_EN_LOW; // counters disabled
-	SRAMOutputDisable(); // disable SRAM OE, WE
-	setIOtoOutput();
-	*/
+
+	// Interrupt in main.c takes over
 }
 
 void loadDataToOutputLines(unsigned short data){

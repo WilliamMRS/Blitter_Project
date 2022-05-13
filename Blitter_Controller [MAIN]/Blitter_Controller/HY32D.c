@@ -8,9 +8,10 @@
 #include <avr/io.h>
 #include "UART.h"
 #include "HY32D.h"
-#include "misc.h"
+#include "makroer.h"
 #include <util/delay.h>
 
+// Global variables
 // not redeclaring these variables increases performance a lot (when not blitting)
 unsigned char lData;
 unsigned char hData;
@@ -218,7 +219,7 @@ void lcdStatusRead(void){ // reads SR register
 void drawImage(unsigned short image[]){
 	CS_LOW;
 	writeIndex(0x22);
-	for(unsigned int i = 0; i < 2540; i++){
+	for(unsigned int i = 0; i < pixels; i++){
 		writeData(image[i]);
 	}
 	CS_HIGH;

@@ -8,8 +8,6 @@ HY32D.c
 
 main.c
 
-misc.c
-
 SRAM.c
 
 UART.c

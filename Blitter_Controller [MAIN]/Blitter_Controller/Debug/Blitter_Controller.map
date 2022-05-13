@@ -34,16 +34,6 @@ Discarded input sections
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
  COMMON         0x00000000        0x0 main.o
- .text          0x00000000        0x0 misc.o
- .data          0x00000000        0x0 misc.o
- .bss           0x00000000        0x0 misc.o
- .debug_info    0x00000000       0x7a misc.o
- .debug_abbrev  0x00000000       0x37 misc.o
- .debug_aranges
-                0x00000000       0x18 misc.o
- .debug_line    0x00000000       0x2a misc.o
- .debug_str     0x00000000      0x186 misc.o
- .comment       0x00000000       0x31 misc.o
  .text          0x00000000        0x0 SRAM.o
  .data          0x00000000        0x0 SRAM.o
  .bss           0x00000000        0x0 SRAM.o
@@ -129,7 +119,6 @@ LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/
 LOAD bitmap.o
 LOAD HY32D.o
 LOAD main.o
-LOAD misc.o
 LOAD SRAM.o
 LOAD UART.o
 LOAD UARTCommands.o
