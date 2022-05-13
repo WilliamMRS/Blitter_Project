@@ -33,9 +33,9 @@ void loadDataToOutputLines(unsigned short data){
 }
 
 // It looks like a write signal to the CLK ruins something ..
-void readSRAM(void){
+void readSRAM(uint32_t memStart){
 	SRAMOutputDisable(); // disable SRAM OE, WE
-	presetCounters(0); // set counters to 0
+	presetCounters(memStart); // set counters to 0
 	
 	//BLT_RST (PB0), BLT_LD, BLT_EN should all be HIGH
 	//Then do BLT_CLK for it to count
@@ -61,9 +61,9 @@ void readSRAM(void){
 	setIOtoOutput();
 }
 
-void writeSRAM(void){
+void writeSRAM(uint16_t color1, uint16_t color2, uint16_t color3, uint32_t memStart){
 	SRAMOutputDisable(); // Disable SRAM
-	presetCounters(0); // Set counters to your desired value (up to 2^20, or about 1 million). Also sets IO to output.
+	presetCounters(memStart); // Set counters to your desired value (up to 2^20, or about 1 million). Also sets IO to output.
 	//setIOtoOutput();
 	BLT_EN_HIGH; // counters enabled
 	LOAD_HIGH; // blt LOAD
@@ -76,24 +76,17 @@ void writeSRAM(void){
 	// Loops with data to transfer. This is hardcoded for now
 
 	for(unsigned long int i = 0; i < (pixels/3); i++){
-		loadDataToOutputLines(Red);
+		loadDataToOutputLines(color1);
 		wrSignalSRAM(); // WriteEnable to SRAM
-		
-		// SRAM write
-		// delay(1us)
-		// SRAM read
-		// lcdwrite, lcdwritestop
-		
-		//SRAMOutputDisable();
 		wrSignal(); // CLK sends write signal to display, and increment counters by 1.
 	}
 	for(unsigned long int i = 0; i < (pixels/3); i++){
-		loadDataToOutputLines(Yellow);
+		loadDataToOutputLines(color2);
 		wrSignalSRAM(); // WriteEnable to SRAM
 		wrSignal(); // counters increment by one.
 	}
 	for(unsigned long int i = 0; i < (pixels/3); i++){
-		loadDataToOutputLines(Blue);
+		loadDataToOutputLines(color3);
 		wrSignalSRAM(); // WriteEnable to SRAM
 		wrSignal(); // counters increment by one.
 	}
@@ -139,13 +132,14 @@ int main(void)
 	systemCheck();
 	startupMessage();
 	
+	writeSRAM(Magenta, Yellow, Light_Blue, 0);
+	writeSRAM(Black, White, Black, pixels);
+	writeSRAM(Cyan, Blue, Red, pixels*2);
     while (1) 
     {
 		/*TODO:
 		R02h to fix display flicker. Do that after initialization.
 		Blitting:
-			Function to write to SRAM.
-			Function to read from SRAM (to see if SRAM is written).
 			Function to blit from SRAM using the counters.
 		
 		Today:
@@ -203,9 +197,13 @@ ISR(USART0_RX_vect){
 		}else if(receivedByte == 'b'){
 			fillScreen(Blue);
 		}else if(receivedByte == 'w'){
-			writeSRAM();
+			writeSRAM(Red, Blue, Green, pixels);
 		}else if(receivedByte == '1'){
-			readSRAM();
+			readSRAM(0);
+		}else if(receivedByte == '2'){
+			readSRAM(pixels);
+		}else if(receivedByte == '3'){
+			readSRAM(pixels*2);
 		}else if(receivedByte == 'T'){
 			screenTest();
 		}else if(receivedByte == 'o'){
