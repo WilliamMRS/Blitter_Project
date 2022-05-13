@@ -66,6 +66,9 @@ void writeSRAM(void){
 	presetCounters(0); // Set counters to your desired value (up to 2^20, or about 1 million). Also sets IO to output.
 	//setIOtoOutput();
 	BLT_EN_HIGH; // counters enabled
+	LOAD_HIGH; // blt LOAD
+	RESET_HIGH; // for counters
+	
 	CS_LOW; // Select LCD and SRAM
 	SRAM_OE_HIGH; // Set output enable to disabled.
 	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.
