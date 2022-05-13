@@ -78,9 +78,14 @@ int main(void)
     {
 		/*TODO:
 		
-		Use timers (using software to increase max value) to blit via PB4 and PE4.
-			
+		System control:
+		sjekk skjerm (forcibly les av SR)
+		sjekk SRAM   (skriv til SRAM, les av verdien, hvis det er samme som ble skrevet (på samme adresse) we good.
+		sjekk UART	(gjøres allerede)
+		sjekk tellere (sett de til en startverdi, sett IO til input og les av)
 		
+		Use timers (using software to increase max value) to blit via PB4 and PE4. (uhhhh)
+			
 		Today:
 			LCD:
 				Set coordinate before drawing (set memory addresses) (to 0,0 at start)
@@ -91,19 +96,9 @@ int main(void)
 				Be able to send commands with information like x, y coordinates, color etc.
 			UART Control:
 				Draw line via UART command line: (command, color, start x, start y, end x, end y)
-				Draw rectangles:
 				Write text coming via UART to specific coordinates on screen: (command, start x, start y, color, data)
-		Tonight:
-			System control:
-				sjekk skjerm
-				sjekk SRAM
-				sjekk UART
-				sjekk tellere
 				
 			Brukt USART til å kjøre kommandoer
-			
-			Få kontakt med flashminnet
-				Tegn fra SRAM til skjermen v.h.a tellerne.
 				
 			// kan lage funksjon som gjør at skjermen ikke hopper addresse når den har tegnet.
 		

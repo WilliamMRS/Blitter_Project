@@ -106,7 +106,6 @@ void fillScreen(unsigned short color){
 	for(uint32_t it = 0; it < pixels; it++){
 		writeData(color);
 	}
-	_delay_ms(1000);
 	CS_HIGH;
 }
 
