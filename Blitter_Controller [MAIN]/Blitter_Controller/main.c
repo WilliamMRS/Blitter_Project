@@ -25,75 +25,12 @@ uint8_t remoteEcho = 0;
 //unsigned char lData; // not redeclaring these variables increases performance a lot
 //unsigned char hData;
 
-void loadDataToOutputLines(unsigned short data){
-	lData = (data & 0xFF);
-	hData = ((data >> 8) & 0xFF);
-	D0_D7 = lData; // Write data to GPIO lines (lines should by default be output)
-	D8_D15 = hData;
-}
-
-// It looks like a write signal to the CLK ruins something ..
-void readSRAM(uint32_t memStart){
-	SRAMOutputDisable(); // disable SRAM OE, WE
-	presetCounters(memStart); // set counters to 0
-	
-	//BLT_RST (PB0), BLT_LD, BLT_EN should all be HIGH
-	//Then do BLT_CLK for it to count
-	BLT_EN_HIGH; // counters enabled
-	RESET_HIGH; // for counter BLT_RST
-	LOAD_HIGH; // for counter BLT_LD
-	CS_LOW; // Select screen and SRAM
-	
-	writeIndex(0x22); // ensure writing to screenbuffer
-	DC_HIGH; // So it can write to screen!
-	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
-	
-	for(unsigned long int i = 0; i < (pixels); i++){
-		rdSignalSRAM(); // SRAM OE goes LOW-HIGH reading the SRAM values on the address specified by the counters to the screen.
-		// PE4 flip fast as f
-		wrSignal(); // counters increment by one and screen updates. BLT_EN and WR
-		// PB4 flip fast as f
-	}
-	
-	CS_HIGH; // deselect LCD and SRAM
-	BLT_EN_LOW; // counters disabled
-	SRAMOutputDisable(); // disable SRAM OE, WE
-	setIOtoOutput();
-}
-
-void writeSRAM(uint16_t color1, uint16_t color2, uint16_t color3, uint32_t memStart){
-	SRAMOutputDisable(); // Disable SRAM
-	presetCounters(memStart); // Set counters to your desired value (up to 2^20, or about 1 million). Also sets IO to output.
-	//setIOtoOutput();
-	BLT_EN_HIGH; // counters enabled
-	LOAD_HIGH; // blt LOAD
-	RESET_HIGH; // for counters
-	
-	CS_LOW; // Select LCD and SRAM
-	SRAM_OE_HIGH; // Set output enable to disabled.
-	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.
-	DC_HIGH;
-	// Loops with data to transfer. This is hardcoded for now
-
-	for(unsigned long int i = 0; i < (pixels/3); i++){
-		loadDataToOutputLines(color1);
-		wrSignalSRAM(); // WriteEnable to SRAM
-		wrSignal(); // CLK sends write signal to display, and increment counters by 1.
-	}
-	for(unsigned long int i = 0; i < (pixels/3); i++){
-		loadDataToOutputLines(color2);
-		wrSignalSRAM(); // WriteEnable to SRAM
-		wrSignal(); // counters increment by one.
-	}
-	for(unsigned long int i = 0; i < (pixels/3); i++){
-		loadDataToOutputLines(color3);
-		wrSignalSRAM(); // WriteEnable to SRAM
-		wrSignal(); // counters increment by one.
-	}
-	
-	CS_HIGH; // deselect LCD and SRAM
-	BLT_EN_LOW; // counters disabled
-	SRAMOutputDisable(); // disable SRAM
+void initTimers(){
+	// CS02,01,00 controls prescaling. Set CS00 to 1, so it's direct clocked (fastest possible).
+	// Set COM0A1 so PB4 port is overridden and outputs the counter interrupts as clocks. (see page 104)
+	disable_counter_PB4;
+	TIMSK0 = 0x00 | (1 << OCIE0A); // Enable interrupts for timer output compare match.
+	//TIMSK2 = 0x00 | (1 << OCIE2A);
 }
 
 int main(void)
@@ -103,7 +40,7 @@ int main(void)
 	DDRB |= (1 << RESET);
 	DDRB |= (1 << CS);
 	DDRB |= (1 << BL_PWM);
-	DDRB |= (1 << WR_BLT_CLK);
+	DDRB |= (1 << WR_BLT_CLK); // set to input, so it's disabled for now.
 	DDRB |= (1 << BLT_EN); // Setting BLT_EN to output;
 	// PORT E to output
 	DDRE |= (1 << SRAM_OE); // Port 4 to output (/SRAM OE)	(D16)
@@ -127,20 +64,22 @@ int main(void)
 	
     initUART(); // initialize the UART
 	initHY32D(); // initialize HY32D screen
-	
+	initTimers(); // init counters for blitting
+
 	sei(); //Enable global interrupt
 	systemCheck();
 	startupMessage();
 	
 	writeSRAM(Magenta, Yellow, Light_Blue, 0);
 	writeSRAM(Black, White, Black, pixels);
-	writeSRAM(Cyan, Blue, Red, pixels*2);
+	//writeSRAM(Cyan, Blue, Red, pixels*2);
+	
     while (1) 
     {
 		/*TODO:
-		R02h to fix display flicker. Do that after initialization.
-		Blitting:
-			Function to blit from SRAM using the counters.
+		
+		Use timers (using software to increase max value) to blit via PB4 and PE4.
+			
 		
 		Today:
 			LCD:
@@ -181,6 +120,24 @@ int main(void)
 		- KAN: Krever kanskje innslag av assembly i høynivåkode. Selvstudium.
 		- INFO:Utviklingen vil skje på egen maskinvareplattform. */
     }
+}
+
+ISR(TIMER0_COMP_vect){
+	//transmitUART('w');
+	//wrSignal();
+	//rdSignalSRAM();
+	/*
+	memCounter++;
+	if(memCounter >= memTarget){
+		TCCR0A = 0x00;
+		TCCR2A = 0x00;
+		transmit8BitAsHex((memCounter & 0xFF));
+		transmit8BitAsHex((memCounter >> 8) & 0xFF);
+		CS_HIGH; // deselect LCD and SRAM
+		BLT_EN_LOW; // counters disabled
+		SRAMOutputDisable(); // disable SRAM OE, WE
+		setIOtoOutput();
+	}*/
 }
 
 ISR(USART0_RX_vect){

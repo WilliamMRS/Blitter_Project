@@ -5,10 +5,15 @@
  *  Author: William M. R. Schmidt
  */ 
 
+#include <avr/io.h>
 #include "misc.h"
 #include <util/delay.h>
 #include "HY32D.h"
 #include "UART.h"
+
+uint32_t memTarget = 0;
+uint32_t memCounter = 0;
+uint8_t continueReadFunction = 1;
 
 // Sends write signal to SRAM, so SRAM takes the data on D0-D15 and 
 // writes it to the address given by the counters.
@@ -22,7 +27,6 @@ void wrSignalSRAM(void){
 // SRAM sends data to D0-D15.
 void rdSignalSRAM(void){
 	SRAM_OE_LOW;
-	//_delay_us(1); // needed?
 	SRAM_OE_HIGH;
 }
 
@@ -75,7 +79,93 @@ void presetCounters(uint32_t value){
 	SRAMOutputDisable(); // SRAM Output disable (PE4 & PE5 are HIGH)
 }
 
-// UNFINISHED
-void readFromSRAM(int address){
+void readSRAM(uint32_t memStart){
+	SRAMOutputDisable(); // disable SRAM OE, WE
+	presetCounters(memStart); // set counters to 0
+	
+	//BLT_RST (PB0), BLT_LD, BLT_EN should all be HIGH
+	//Then do BLT_CLK for it to count
+	BLT_EN_HIGH; // counters enabled
+	RESET_HIGH; // for counter BLT_RST
+	LOAD_HIGH; // for counter BLT_LD
+	CS_LOW; // Select screen and SRAM
+	
+	writeIndex(0x22); // ensure writing to screenbuffer
+	DC_HIGH; // So it can write to screen!
+	setIOtoInput(); // Set D0-D15 to input so it doesn't interfere with SRAM to Screen lines
+	
+	for(unsigned long int i = 0; i < (pixels); i++){
+		rdSignalSRAM(); // SRAM OE goes LOW-HIGH reading the SRAM values on the address specified by the counters to the screen.
+		// PE4 flip fast as f
+		wrSignal(); // counters increment by one and screen updates. BLT_EN and WR
+		// PB4 flip fast as f
+	}
+	
+	//memTarget = (memStart + pixels);
+	//memCounter = memStart;
+	//TCCR0A = 0x00 | (0 << FOC0A) | (0 << WGM00) | (0 << COM0A1) | (1 << COM0A0) | (0 << WGM01) | (0 << CS02) | (0 << CS01) | (1 << CS00);
+	//disable_counter_PB4;
+	
+	/*
+	memTarget = (uint16_t) (memStart + pixels);
+	memCounter = memStart;
+	continueReadFunction = 1;
+		transmitUART('@');
+		rdSignalSRAM();
+	enable_counter_PB4;
+	_delay_ms(10);
+		transmitUART('@');
+	while(continueReadFunction){
+		// do nothing, let interrupts do the job
+	}
+	transmitUART('@');
+	*/
+/*
+	CS_HIGH; // deselect LCD and SRAM
+	BLT_EN_LOW; // counters disabled
+	SRAMOutputDisable(); // disable SRAM OE, WE
+	setIOtoOutput();
+	*/
+}
 
+void loadDataToOutputLines(unsigned short data){
+	lData = (data & 0xFF);
+	hData = ((data >> 8) & 0xFF);
+	D0_D7 = lData; // Write data to GPIO lines (lines should by default be output)
+	D8_D15 = hData;
+}
+
+void writeSRAM(uint16_t color1, uint16_t color2, uint16_t color3, uint32_t memStart){
+	SRAMOutputDisable(); // Disable SRAM
+	presetCounters(memStart); // Set counters to your desired value (up to 2^20, or about 1 million). Also sets IO to output.
+	//setIOtoOutput();
+	BLT_EN_HIGH; // counters enabled
+	LOAD_HIGH; // blt LOAD
+	RESET_HIGH; // for counters
+	
+	CS_LOW; // Select LCD and SRAM
+	SRAM_OE_HIGH; // Set output enable to disabled.
+	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.
+	DC_HIGH;
+	// Loops with data to transfer. This is hardcoded for now
+
+	for(unsigned long int i = 0; i < (pixels/3); i++){
+		loadDataToOutputLines(color1);
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // CLK sends write signal to display, and increment counters by 1.
+	}
+	for(unsigned long int i = 0; i < (pixels/3); i++){
+		loadDataToOutputLines(color2);
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
+	}
+	for(unsigned long int i = 0; i < (pixels/3); i++){
+		loadDataToOutputLines(color3);
+		wrSignalSRAM(); // WriteEnable to SRAM
+		wrSignal(); // counters increment by one.
+	}
+	
+	CS_HIGH; // deselect LCD and SRAM
+	BLT_EN_LOW; // counters disabled
+	SRAMOutputDisable(); // disable SRAM
 }

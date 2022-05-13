@@ -21,6 +21,9 @@
 
 #include "stdint.h"
 #include <avr/io.h>
+#include <util/delay.h>
+#include "HY32D.h"
+#include "UART.h"
 
 // Blue, green, red
 #define White 0xFFFF
@@ -77,6 +80,10 @@
 #define SRAM_OE_LOW PORTE &= ~(1 << SRAM_OE)
 #define SRAM_WE_HIGH PORTE |= (1 << SRAM_WE)
 #define SRAM_WE_LOW PORTE &= ~(1 << SRAM_WE)
+
+#define enable_counter_PB4 TCCR0A = 0x00 | (0 << FOC0A) | (0 << WGM00) | (0 << COM0A1) | (1 << COM0A0) | (0 << WGM01) | (0 << CS02) | (0 << CS01) | (1 << CS00)
+#define enable_counter_withoutpin_PB4 TCCR0A = 0x00 | (0 << FOC0A) | (0 << WGM00) | (0 << COM0A1) | (0 << COM0A0) | (0 << WGM01) | (1 << CS02) | (0 << CS01) | (1 << CS00)
+#define disable_counter_PB4 TCCR0A = 0x00 | (0 << FOC0A) | (0 << WGM00) | (0 << COM0A1) | (0 << COM0A0) | (0 << WGM01) | (0 << CS02) | (0 << CS01) | (0 << CS00)
 
 #define D0_D7 PORTA // used only for output
 #define D8_D15 PORTC // used only for output

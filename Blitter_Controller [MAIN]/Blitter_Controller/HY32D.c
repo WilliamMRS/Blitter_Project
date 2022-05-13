@@ -45,6 +45,8 @@ void initHY32D(void){
 	// Ram data write
 	colorTest();
 	// Display on
+	// Removes flickering on certain colors by changed how the display is driven.
+	writeToRegister(0x02, 0x1000);
 }
 
 /*
@@ -98,28 +100,19 @@ void setIOtoInput(void){
 	_delay_ms(100);
 }
 
-/* Not in use currently
-void drawImage(unsigned short image[]){
-	CS_LOW;
-	writeIndex(0x22);
-	for(unsigned int i = 0; i < 2540; i++){
-		writeData(image[i]);
-	}
-	CS_HIGH;
-}
-*/
-
 void fillScreen(unsigned short color){
 	CS_LOW;
 	writeIndex(0x22);
-	for(unsigned long int it = 0; it < pixels; it++){
+	for(uint32_t it = 0; it < pixels; it++){
 		writeData(color);
 	}
+	_delay_ms(1000);
 	CS_HIGH;
 }
 
 void screenTest(void){
 	CS_LOW;
+	setIOtoOutput();
 	fillScreen(White);
 	fillScreen(Black);
 	fillScreen(Grey);
@@ -221,3 +214,14 @@ void lcdStatusRead(void){ // reads SR register
 	transmitUART(CR);
 	CS_HIGH;
 }
+
+/* Not in use currently
+void drawImage(unsigned short image[]){
+	CS_LOW;
+	writeIndex(0x22);
+	for(unsigned int i = 0; i < 2540; i++){
+		writeData(image[i]);
+	}
+	CS_HIGH;
+}
+*/
