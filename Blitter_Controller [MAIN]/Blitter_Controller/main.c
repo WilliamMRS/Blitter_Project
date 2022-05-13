@@ -64,14 +64,16 @@ void readSRAM(void){
 void writeSRAM(void){
 	SRAMOutputDisable(); // Disable SRAM
 	presetCounters(0); // Set counters to your desired value (up to 2^20, or about 1 million). Also sets IO to output.
+	//setIOtoOutput();
 	BLT_EN_HIGH; // counters enabled
 	CS_LOW; // Select LCD and SRAM
+	SRAM_OE_HIGH; // Set output enable to disabled.
 	writeIndex(0x22); // Set display to write to video ram to avoid it writing to any other register.
 	DC_HIGH;
 	// Loops with data to transfer. This is hardcoded for now
 
-	for(unsigned long int i = 0; i < (pixels); i++){
-		loadDataToOutputLines(Magenta);
+	for(unsigned long int i = 0; i < (pixels/3); i++){
+		loadDataToOutputLines(Red);
 		wrSignalSRAM(); // WriteEnable to SRAM
 		
 		// SRAM write
@@ -81,9 +83,9 @@ void writeSRAM(void){
 		
 		//SRAMOutputDisable();
 		wrSignal(); // CLK sends write signal to display, and increment counters by 1.
-	}/*
+	}
 	for(unsigned long int i = 0; i < (pixels/3); i++){
-		loadDataToOutputLines(Green);
+		loadDataToOutputLines(Yellow);
 		wrSignalSRAM(); // WriteEnable to SRAM
 		wrSignal(); // counters increment by one.
 	}
@@ -91,7 +93,7 @@ void writeSRAM(void){
 		loadDataToOutputLines(Blue);
 		wrSignalSRAM(); // WriteEnable to SRAM
 		wrSignal(); // counters increment by one.
-	}*/
+	}
 	
 	CS_HIGH; // deselect LCD and SRAM
 	BLT_EN_LOW; // counters disabled
@@ -126,7 +128,6 @@ int main(void)
 	// Set IO (D0-D15) to output
 	DDRA = 0xFF; // D0 - D7
 	DDRC = 0xFF; // D8 - D15
-
 	
     initUART(); // initialize the UART
 	initHY32D(); // initialize HY32D screen
@@ -200,12 +201,12 @@ ISR(USART0_RX_vect){
 			fillScreen(Blue);
 		}else if(receivedByte == 'w'){
 			writeSRAM();
-		}else if(receivedByte == 'r'){
+		}else if(receivedByte == '1'){
 			readSRAM();
 		}else if(receivedByte == 'T'){
 			screenTest();
 		}else if(receivedByte == 'o'){
-			presetCounters(100000);
+			presetCounters(1000);
 		}
 	}
 	if (remoteEcho && ((receivedByte > 31) || (receivedByte == Bell) || (receivedByte == CR) || (receivedByte == LF) || (receivedByte == backspace))){

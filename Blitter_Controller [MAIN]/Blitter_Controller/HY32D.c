@@ -202,8 +202,8 @@ void lcdStatusRead(void){ // reads SR register
 	CS_LOW;
 	DC_LOW;
 	data = readDataLines();// read data coming through IO lines
-	uint8_t udata = ((data >> 8) & 0xFF);
-	uint8_t ldata = (data & 0xFF);
+	uint8_t udata = (uint8_t)(data >> 8);
+	uint8_t ldata = (uint8_t)(data & 0xFF);
 	transmitUART(CR);
 	transmitUART('S'); 	transmitUART('C'); 	transmitUART('R'); transmitUART('E'); 	transmitUART('E');
 	transmitUART('N'); 	transmitUART(' '); transmitUART('S'); 	transmitUART('T'); transmitUART('A');

@@ -30,7 +30,7 @@ uint8_t puttyCompatibleCheck(uint8_t byte){
 	if((byte > 31) || (byte == Bell) || (byte == CR) || (byte == LF) || (byte == backspace)){
 		return byte;
 		}else{
-		return (uint8_t)64;
+		return (uint8_t)64; // this is a kinda derpy error message. Should change this to something like 'ERROR'
 	}
 }
 
@@ -48,4 +48,42 @@ int transmitUART (char data){
 			}
 		}
 	}
+}
+
+// four bit to Hex
+uint8_t toHex(uint8_t number) {
+	uint8_t num = '0'+number;
+	if(num < 58){
+		return num;
+	}
+	else if(num == 58){
+		return 'A';
+	}
+	else if(num == 59){
+		return 'B';
+	}
+	else if(num == 60){
+		return 'C';
+	}
+	else if(num == 61){
+		return 'D';
+	}
+	else if(num == 62){
+		return 'E';
+	}
+	else if(num == 63){
+		return 'F';
+		}else{
+		return 0;
+	}
+}
+
+void transmit8BitAsHex(uint8_t data){
+	transmitUART('0');
+	transmitUART('x');
+	uint8_t uhex = ((data >> 4) & 0x0F);
+	uint8_t lhex = (data & 0x0F); // xxxx xxxx & 0000 1111 => xxxx 1001
+	transmitUART(toHex(uhex));
+	transmitUART(toHex(lhex));
+	transmitUART(' ');
 }

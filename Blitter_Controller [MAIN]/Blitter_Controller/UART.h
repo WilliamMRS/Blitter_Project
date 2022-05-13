@@ -15,5 +15,7 @@
 
 void initUART(void);
 int transmitUART (char data);
+uint8_t toHex(uint8_t number);
+void transmit8BitAsHex(uint8_t data);
 
 #endif /* UART_H_ */

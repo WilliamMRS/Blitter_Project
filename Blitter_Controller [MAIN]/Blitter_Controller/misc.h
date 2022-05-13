@@ -51,7 +51,7 @@
 #define DC 7
 
 // PORT B
-#define RESET 0
+#define RESET 0 // Same as BLT_RST aka /SCLR
 #define WR_BLT_CLK 4
 #define BL_PWM 5
 #define CS 6
@@ -81,8 +81,5 @@
 #define D0_D7 PORTA // used only for output
 #define D8_D15 PORTC // used only for output
 #define DATA_IN (PINC << 8) | (PINA & 0xFF) // macro for reading incoming data
-
-uint8_t toHex(uint8_t number);
-void transmitInt(uint32_t number);
 
 #endif /* MISC_H_ */
